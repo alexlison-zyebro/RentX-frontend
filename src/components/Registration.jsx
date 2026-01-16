@@ -12,11 +12,11 @@ const RentXRegistration = () => {
       <div className="w-full max-w-4xl mb-8">
 
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 shadow-lg" style={{ backgroundColor: '#6B1B5E' }}>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 shadow-lg bg-orange-600">
             <Building2 className="w-10 h-10 text-white" />
           </div>
           <h3 className="text-4xl font-black text-gray-900 mb-2">
-            Rent<span style={{ color: '#6B1B5E' }}>X</span>
+            Rent<span className="text-orange-600 text-5xl">X</span>
           </h3>
           <p className="text-gray-600 text-lg font-medium">PowerTools Marketplace</p>
         </div>
@@ -29,10 +29,9 @@ const RentXRegistration = () => {
             <button
               onClick={() => { setUserType('buyer'); setSellerType(''); setOtpSent(false); }}
               className={`flex items-center justify-center gap-2 px-4 py-4 rounded-xl font-bold transition-all ${userType === 'buyer'
-                ? 'text-white shadow-lg'
+                ? 'bg-orange-600 text-white shadow-lg'
                 : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                 }`}
-              style={userType === 'buyer' ? { backgroundColor: '#6B1B5E' } : {}}
             >
               <User className="w-4 h-4" />
               Buyer
@@ -40,10 +39,9 @@ const RentXRegistration = () => {
             <button
               onClick={() => { setUserType('seller'); setSellerType(''); setOtpSent(false); }}
               className={`flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all ${userType === 'seller'
-                ? 'text-white shadow-lg'
+                ? 'bg-orange-600 text-white shadow-lg'
                 : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                 }`}
-              style={userType === 'seller' ? { backgroundColor: '#6B1B5E' } : {}}
             >
               <Store className="w-4 h-4" />
               Seller
@@ -59,32 +57,32 @@ const RentXRegistration = () => {
                 <input
                   type="text"
                   placeholder="Full Name"
-                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                  style={{ '--tw-ring-color': '#6B1B5E' }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
                 />
 
                 <input
-                  type="date"
-                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                  style={{ '--tw-ring-color': '#6B1B5E' }}
+                  type="text"
+                  placeholder="Date of Birth"
+                  onFocus={(e) => (e.target.type = 'date')}
+                  onBlur={(e) => {
+                    if (!e.target.value) e.target.type = 'text'
+                  }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
                 />
+
 
                 <div className="flex gap-2 md:col-span-2">
                   <input
                     type="email"
                     placeholder="Email Address"
-                    className="flex-1 px-4 py-3.5 bg-gray-50 border rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none  transition-all"
-                    style={{ '--tw-ring-color': '#6B1B5E' }}
+                    className="flex-1 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 transition-all"
                   />
                   <button
                     onClick={() => setOtpSent(true)}
-                    className="h-12 w-24 text-sm text-white rounded-lg font-medium flex items-center justify-center mt-1
-             bg-orange-300 hover:bg-orange-600 transition-colors"
+                    className="h-12 w-24 text-sm text-white rounded-lg font-medium flex items-center justify-center mt-1 bg-orange-500 hover:bg-orange-600 transition-colors"
                   >
                     {otpSent ? <Check className="w-4 h-4" /> : "Send OTP"}
                   </button>
-
-
                 </div>
 
                 {otpSent && (
@@ -92,8 +90,7 @@ const RentXRegistration = () => {
                     type="text"
                     placeholder="Enter 6-Digit OTP"
                     maxLength="6"
-                    className="md:col-span-2 px-4 py-3.5 border-2 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none font-bold text-center text-xl tracking-widest transition-all"
-                    style={{ backgroundColor: '#FAF5F9', borderColor: '#d0bfd6', '--tw-ring-color': '#6B1B5E' }}
+                    className="md:col-span-2 px-4 py-3.5 bg-orange-50 border-2 border-orange-300 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-600 font-bold text-center text-xl tracking-widest transition-all"
                   />
                 )}
 
@@ -101,44 +98,36 @@ const RentXRegistration = () => {
                   type="tel"
                   placeholder="Phone Number"
                   maxLength="10"
-                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                  style={{ '--tw-ring-color': '#6B1B5E' }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
                 />
 
                 <input
                   type="text"
                   placeholder="Street Address"
-                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                  style={{ '--tw-ring-color': '#6B1B5E' }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
                 />
 
                 <input
                   type="text"
                   placeholder="City"
-                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                  style={{ '--tw-ring-color': '#6B1B5E' }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
                 />
 
                 <input
                   type="text"
                   placeholder="State"
-                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                  style={{ '--tw-ring-color': '#6B1B5E' }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
                 />
 
                 <input
                   type="text"
                   placeholder="Pincode"
                   maxLength="6"
-                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                  style={{ '--tw-ring-color': '#6B1B5E' }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
                 />
               </div>
 
-              <button
-                className="w-full mt-6 px-6 py-4 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:opacity-90"
-                style={{ backgroundColor: '#6B1B5E' }}
-              >
+              <button className="w-full mt-6 px-6 py-4 bg-orange-600 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:bg-orange-700">
                 Register as Buyer →
               </button>
             </div>
@@ -152,12 +141,10 @@ const RentXRegistration = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <button
                   onClick={() => setSellerType('individual')}
-                  className="bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl p-8 transition-all text-left group"
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#6B1B5E'}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = '#E5E7EB'}
+                  className="bg-white border-2 border-gray-200 hover:border-orange-600 hover:shadow-lg rounded-2xl p-8 transition-all text-left group"
                 >
-                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 transition-all" style={{ backgroundColor: '#FAF5F9' }}>
-                    <User className="w-8 h-8 transition-colors" style={{ color: '#6B1B5E' }} />
+                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-orange-50 transition-all">
+                    <User className="w-8 h-8 text-orange-600 transition-colors" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Individual Seller</h3>
                   <p className="text-gray-600">Rent your personal tools</p>
@@ -165,12 +152,10 @@ const RentXRegistration = () => {
 
                 <button
                   onClick={() => setSellerType('organization')}
-                  className="bg-white border-2 border-gray-200 hover:shadow-lg rounded-2xl p-8 transition-all text-left group"
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#6B1B5E'}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = '#E5E7EB'}
+                  className="bg-white border-2 border-gray-200 hover:border-orange-600 hover:shadow-lg rounded-2xl p-8 transition-all text-left group"
                 >
-                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 transition-all" style={{ backgroundColor: '#FAF5F9' }}>
-                    <Store className="w-8 h-8 transition-colors" style={{ color: '#6B1B5E' }} />
+                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-orange-50 transition-all">
+                    <Store className="w-8 h-8 text-orange-600 transition-colors" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Organization / Store</h3>
                   <p className="text-gray-600">Register your business</p>
@@ -182,37 +167,44 @@ const RentXRegistration = () => {
           {/* SELLER FORM - Individual */}
           {userType === 'seller' && sellerType === 'individual' && (
             <div>
-              <button onClick={() => setSellerType('')} className="font-bold mb-4 hover:opacity-80" style={{ color: '#6B1B5E' }}>← Back</button>
+              <button onClick={() => setSellerType('')} className="text-orange-600 font-bold mb-4 hover:text-orange-700">← Back</button>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Individual Seller Registration</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Full Name" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Full Name" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="date" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
-
-                <input type="tel" placeholder="Phone Number" maxLength="10" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input
+                  type="text"
+                  placeholder="Date of Birth"
+                  onFocus={(e) => (e.target.type = 'date')}
+                  onBlur={(e) => {
+                    if (!e.target.value) e.target.type = 'text'
+                  }}
+                  className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
+                />
+                <input type="tel" placeholder="Phone Number" maxLength="10" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
                 <div className="flex gap-2 md:col-span-2">
-                  <input type="email" placeholder="Email Address" className="flex-1 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
-                  <button onClick={() => setOtpSent(true)} className="px-7 py-3.5 text-white rounded-xl font-bold transition-all shadow-md hover:opacity-90" style={{ backgroundColor: '#6B1B5E' }}>
+                  <input type="email" placeholder="Email Address" className="flex-1 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
+                  <button onClick={() => setOtpSent(true)} className="px-7 py-3.5 bg-orange-600 text-white rounded-xl font-bold transition-all shadow-md hover:bg-orange-700">
                     {otpSent ? <Check className="w-5 h-5" /> : 'Send OTP'}
                   </button>
                 </div>
 
-                {otpSent && <input type="text" placeholder="Enter 6-Digit OTP" maxLength="6" className="md:col-span-2 px-4 py-3.5 border-2 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 font-bold text-center text-xl tracking-widest transition-all" style={{ backgroundColor: '#FAF5F9', borderColor: '#6B1B5E', '--tw-ring-color': '#6B1B5E' }} />}
+                {otpSent && <input type="text" placeholder="Enter 6-Digit OTP" maxLength="6" className="md:col-span-2 px-4 py-3.5 bg-orange-50 border-2 border-orange-300 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-600 font-bold text-center text-xl tracking-widest transition-all" />}
 
-                <input type="text" placeholder="Street Address" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Street Address" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="City" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="City" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="State" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="State" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="Pincode" maxLength="6" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Pincode" maxLength="6" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="Aadhaar Number" maxLength="12" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Aadhaar Number" maxLength="12" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
               </div>
 
-              <button className="w-full mt-6 px-6 py-4 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:opacity-90" style={{ backgroundColor: '#6B1B5E' }}>
+              <button className="w-full mt-6 px-6 py-4 bg-orange-600 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:bg-orange-700">
                 Register as Individual Seller →
               </button>
             </div>
@@ -221,37 +213,37 @@ const RentXRegistration = () => {
           {/* SELLER FORM - Organization */}
           {userType === 'seller' && sellerType === 'organization' && (
             <div>
-              <button onClick={() => setSellerType('')} className="font-bold mb-4 hover:opacity-80" style={{ color: '#6B1B5E' }}>← Back</button>
+              <button onClick={() => setSellerType('')} className="text-orange-600 font-bold mb-4 hover:text-orange-700">← Back</button>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Organization Registration</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Organization Name" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Organization Name" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="Owner Name" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Owner Name" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="tel" placeholder="Phone Number" maxLength="10" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="tel" placeholder="Phone Number" maxLength="10" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
                 <div className="flex gap-2 md:col-span-2">
-                  <input type="email" placeholder="Email Address" className="flex-1 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
-                  <button onClick={() => setOtpSent(true)} className="px-7 py-3.5 text-white rounded-xl font-bold transition-all shadow-md hover:opacity-90" style={{ backgroundColor: '#6B1B5E' }}>
+                  <input type="email" placeholder="Email Address" className="flex-1 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
+                  <button onClick={() => setOtpSent(true)} className="px-7 py-3.5 bg-orange-600 text-white rounded-xl font-bold transition-all shadow-md hover:bg-orange-700">
                     {otpSent ? <Check className="w-5 h-5" /> : 'Send OTP'}
                   </button>
                 </div>
 
-                {otpSent && <input type="text" placeholder="Enter 6-Digit OTP" maxLength="6" className="md:col-span-2 px-4 py-3.5 border-2 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 font-bold text-center text-xl tracking-widest transition-all" style={{ backgroundColor: '#FAF5F9', borderColor: '#6B1B5E', '--tw-ring-color': '#6B1B5E' }} />}
+                {otpSent && <input type="text" placeholder="Enter 6-Digit OTP" maxLength="6" className="md:col-span-2 px-4 py-3.5 bg-orange-50 border-2 border-orange-300 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-600 font-bold text-center text-xl tracking-widest transition-all" />}
 
-                <input type="text" placeholder="Street Address" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Street Address" className="md:col-span-2 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="City" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="City" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="State" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="State" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="Pincode" maxLength="6" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Pincode" maxLength="6" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
 
-                <input type="text" placeholder="Government ID / Aadhaar" maxLength="12" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all" style={{ '--tw-ring-color': '#6B1B5E' }} />
+                <input type="text" placeholder="Aadhaar Number" maxLength="12" className="px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all" />
               </div>
 
-              <button className="w-full mt-6 px-6 py-4 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:opacity-90" style={{ backgroundColor: '#6B1B5E' }}>
+              <button className="w-full mt-6 px-6 py-4 bg-orange-600 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:bg-orange-700">
                 Register as Organization →
               </button>
             </div>
