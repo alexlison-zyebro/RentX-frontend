@@ -194,7 +194,7 @@ const Registration = () => {
           <p className="text-gray-600 text-lg font-medium">PowerTools Marketplace</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-12 px-14">
           <div className="grid grid-cols-2 gap-4 mb-8">
             <button
               onClick={() => { 
@@ -280,7 +280,7 @@ const Registration = () => {
                         value={form.buyerName}
                         onChange={handleChange}
                         placeholder="Full Name"
-                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.buyerName ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.buyerName ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                       />
                       {errors.buyerName && <p className="text-red-500 text-xs mt-1 ml-1">{errors.buyerName}</p>}
                     </div>
@@ -292,7 +292,7 @@ const Registration = () => {
                         onChange={handleChange}
                         placeholder="Date of Birth"
                         onFocus={(e) => e.target.type = 'date'}
-                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.dob ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.dob ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                       />
                       {errors.dob && <p className="text-red-500 text-xs mt-1 ml-1">{errors.dob}</p>}
                     </div>
@@ -307,7 +307,7 @@ const Registration = () => {
                           value={form.organizationName}
                           onChange={handleChange}
                           placeholder="Organization Name"
-                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.organizationName ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.organizationName ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                         />
                         {errors.organizationName && <p className="text-red-500 text-xs mt-1 ml-1">{errors.organizationName}</p>}
                       </div>
@@ -321,7 +321,7 @@ const Registration = () => {
                           value={form.individualName}
                           onChange={handleChange}
                           placeholder={sellerType === 'individual' ? 'Full Name' : 'Owner Name'}
-                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.individualName ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.individualName ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                         />
                         {errors.individualName && <p className="text-red-500 text-xs mt-1 ml-1">{errors.individualName}</p>}
                       </div>
@@ -333,7 +333,7 @@ const Registration = () => {
                           onChange={handleChange}
                           placeholder={sellerType === 'individual' ? 'Date of Birth' : 'Owner Date of Birth'}
                           onFocus={(e) => e.target.type = 'date'}
-                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.individualDob ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.individualDob ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                         />
                         {errors.individualDob && <p className="text-red-500 text-xs mt-1 ml-1">{errors.individualDob}</p>}
                       </div>
@@ -349,7 +349,7 @@ const Registration = () => {
                       value={form.email}
                       onChange={handleChange}
                       placeholder="Email Address"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.email ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.email ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                     />
                     {errors.email && <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>}
                   </div>
@@ -369,7 +369,7 @@ const Registration = () => {
                         onChange={handleChange}
                         placeholder="6-digit OTP"
                         maxLength="6"
-                        className={`w-full px-4 py-3.5 bg-orange-50 border ${errors.otp ? 'border-red-400' : 'border-orange-300'} rounded-xl text-center font-bold tracking-widest outline-none`}
+                        className={`w-full px-4 py-3.5 bg-orange-50 border ${errors.otp ? 'border-red-400' : 'border-orange-300' } rounded-xl text-center font-bold tracking-widest outline-none`}
                       />
                       {errors.otp && <p className="text-red-500 text-xs mt-1 ml-1">{errors.otp}</p>}
                     </div>
@@ -388,7 +388,7 @@ const Registration = () => {
                       onChange={handleChange}
                       placeholder="Phone Number"
                       maxLength="10"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.phone ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.phone ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                     />
                     {errors.phone && <p className="text-red-500 text-xs mt-1 ml-1">{errors.phone}</p>}
                   </div>
@@ -402,7 +402,7 @@ const Registration = () => {
                         onChange={handleChange}
                         placeholder="Aadhaar Number"
                         maxLength="12"
-                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.aadhaarNumber ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.aadhaarNumber ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                       />
                       {errors.aadhaarNumber && <p className="text-red-500 text-xs mt-1 ml-1">{errors.aadhaarNumber}</p>}
                     </div>
@@ -415,7 +415,7 @@ const Registration = () => {
                     value={form.street}
                     onChange={handleChange}
                     placeholder="Street Address"
-                    className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.street ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                    className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.street ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                   />
                   {errors.street && <p className="text-red-500 text-xs mt-1 ml-1">{errors.street}</p>}
                 </div>
@@ -427,7 +427,7 @@ const Registration = () => {
                       value={form.city}
                       onChange={handleChange}
                       placeholder="City"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.city ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.city ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                     />
                     {errors.city && <p className="text-red-500 text-xs mt-1 ml-1">{errors.city}</p>}
                   </div>
@@ -438,7 +438,7 @@ const Registration = () => {
                       value={form.state}
                       onChange={handleChange}
                       placeholder="State"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.state ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.state ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                     />
                     {errors.state && <p className="text-red-500 text-xs mt-1 ml-1">{errors.state}</p>}
                   </div>
@@ -450,7 +450,7 @@ const Registration = () => {
                       onChange={handleChange}
                       placeholder="Pincode"
                       maxLength="6"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.pincode ? 'border-red-400' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-orange-600 outline-none`}
+                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.pincode ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
                     />
                     {errors.pincode && <p className="text-red-500 text-xs mt-1 ml-1">{errors.pincode}</p>}
                   </div>
