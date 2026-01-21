@@ -8,7 +8,6 @@ const LandingPage = () => {
     return (
         <div className="min-h-screen bg-white">
 
-            {/* Navbar */}
             <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-lg border-b border-gray-200 z-50 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-20">
@@ -55,7 +54,6 @@ const LandingPage = () => {
                 </div>
             </nav>
 
-            {/* Hero Section */}
             <section id="home" className="mx-6 pt-32 pb-20 px-4">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -123,7 +121,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* Features Section */}
             <section id="features" className="py-20 px-4 bg-gray-50">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
@@ -159,7 +156,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* How It Works */}
             <section id="how-it-works" className="py-20 px-4">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
@@ -189,7 +185,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* CTA Section */}
             <section className="py-20 px-4 bg-gradient-to-br from-orange-600 to-orange-700">
                 <div className="max-w-4xl mx-auto text-center">
                     <h2 className="text-4xl md:text-5xl font-black text-white mb-6">Ready to Get Started?</h2>
@@ -200,7 +195,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* Footer */}
             <footer id="contact" className="bg-gray-900 text-white py-12 px-4">
                 <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
                     <div>
