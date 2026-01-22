@@ -119,7 +119,7 @@ const Registration = () => {
     setLoading(true);
     try {
       const res = await axios.post("http://localhost:4000/api/auth/verify-otp", { 
-        email: form.email, otp: form.otp 
+        email: form.email, otp: form.otp ,purpose: "REGISTER"
       });
       if (res.data.status === "SUCCESS") {
         setOtpVerified(true);
