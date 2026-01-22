@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { Building2, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
+    const [apiError, setApiError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
         setErrors({ ...errors, [e.target.name]: "" });
+        setApiError("");
     };
 
     const validateEmail = (email) => {
@@ -18,23 +26,55 @@ const Login = () => {
 
     const validateForm = () => {
         const newErrors = {};
+
         if (!form.email) {
             newErrors.email = "Email is required";
         } else if (!validateEmail(form.email)) {
             newErrors.email = "Invalid email format";
         }
+
         if (!form.password) {
             newErrors.password = "Password is required";
-        } else if (form.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters";
         }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleLogin = () => {
-        if (validateForm()) {
-            console.log("Login successful:", form);
+    const handleLogin = async () => {
+        if (!validateForm()) return;
+
+        try {
+            setLoading(true);
+
+            const res = await axios.post(
+                "http://localhost:4000/api/auth/login",
+                form
+            );
+
+            const { token, roles } = res.data;
+
+            localStorage.setItem("token", token);
+            localStorage.setItem("roles", JSON.stringify(roles));
+
+            if (roles.includes("ADMIN")) {
+                navigate("/admin/dashboard");
+            } else if (roles.includes("SELLER") && roles.includes("BUYER")) {
+                navigate("/home");
+            } else if (roles.includes("SELLER")) {
+                navigate("/seller/dashboard");
+            } else {
+                navigate("/home");
+            }
+
+        } catch (error) {
+            if (error.response) {
+                setApiError(error.response.data.message);
+            } else {
+                setApiError("Server not reachable");
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -65,6 +105,11 @@ const Login = () => {
                         <h2 className="text-4xl font-bold text-center text-gray-900 mb-3">
                             Login
                         </h2>
+                        {apiError && (
+                            <p className="text-red-400 font-mono bg-orange-50 p-3 rounded-3xl mt-5 text-sm text-center font-semibold">
+                                {apiError}
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-6">
@@ -81,8 +126,9 @@ const Login = () => {
                                     onChange={handleChange}
                                     onKeyPress={handleKeyPress}
                                     placeholder="you@example.com"
-                                    className={`w-full pl-12 pr-4 py-4 bg-gray-50/50 border-2 ${errors.email ? 'border-red-400 bg-red-50/30' : 'border-gray-200'
-                                        } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200 placeholder-gray-400`}
+                                    className={`w-full pl-12 pr-4 py-4 bg-gray-50/50 border-2 ${
+                                        errors.email ? 'border-red-400 bg-red-50/30' : 'border-gray-200'
+                                    } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200 placeholder-gray-400`}
                                 />
                             </div>
                             {errors.email && (
@@ -98,9 +144,9 @@ const Login = () => {
                                 <label className="block text-sm font-bold text-gray-700 group-focus-within:text-orange-600 transition-colors">
                                     Password
                                 </label>
-                                <a href="#" className="text-xs font-semibold text-orange-600 hover:text-orange-700 hover:underline transition-all">
-                                    Forgot password?
-                                </a>
+                                <Link to="/forgotPassword" className="text-xs pr-3 font-semibold text-orange-600 hover:text-orange-700 hover:underline transition-all">
+                                    forgot password?
+                                </Link>
                             </div>
                             <div className="relative">
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-600 transition-colors" />
@@ -111,8 +157,9 @@ const Login = () => {
                                     onChange={handleChange}
                                     onKeyPress={handleKeyPress}
                                     placeholder="••••••••"
-                                    className={`w-full pl-12 pr-14 py-4 bg-gray-50/50 border-2 ${errors.password ? 'border-red-400 bg-red-50/30' : 'border-gray-200'
-                                        } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200`}
+                                    className={`w-full pl-12 pr-14 py-4 bg-gray-50/50 border-2 mb-2 ${
+                                        errors.password ? 'border-red-400 bg-red-50/30' : 'border-gray-200'
+                                    } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200`}
                                 />
                                 <button
                                     type="button"
@@ -129,23 +176,13 @@ const Login = () => {
                                 </p>
                             )}
                         </div>
-                        <div className="flex items-center">
-                            <label className="flex items-center cursor-pointer group/check">
-                                <input
-                                    type="checkbox"
-                                    className="w-5 h-5 ml-2 text-orange-600 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 cursor-pointer"
-                                />
-                                <span className="ml-3 text-sm font-medium text-gray-700 group-hover/check:text-gray-900 transition-colors">
-                                    Keep me signed in
-                                </span>
-                            </label>
-                        </div>
 
                         <button
                             onClick={handleLogin}
+                            disabled={loading}
                             className="w-full py-4 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group/btn"
                         >
-                            <span>Login</span>
+                            <span>{loading ? "Logging in..." : "Login"}</span>
                             <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </button>
 
@@ -159,15 +196,15 @@ const Login = () => {
                         </div>
 
                         <div className="text-center">
-                            <a
-                                href="/registration"
+                            <Link
+                                to="/registration"
                                 className="inline-flex items-center gap-2 text-base font-bold text-orange-600 hover:text-orange-700 transition-all group/link"
                             >
                                 <span className="border-b-2 border-transparent group-hover/link:border-orange-600 transition-all">
                                     Create your account
                                 </span>
                                 <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -180,22 +217,16 @@ const Login = () => {
             </div>
 
             <style>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          25% { transform: translate(20px, -20px) scale(1.1); }
-          50% { transform: translate(-20px, 20px) scale(0.9); }
-          75% { transform: translate(20px, 20px) scale(1.05); }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
+                @keyframes blob {
+                  0%, 100% { transform: translate(0, 0) scale(1); }
+                  25% { transform: translate(20px, -20px) scale(1.1); }
+                  50% { transform: translate(-20px, 20px) scale(0.9); }
+                  75% { transform: translate(20px, 20px) scale(1.05); }
+                }
+                .animate-blob { animation: blob 7s infinite; }
+                .animation-delay-2000 { animation-delay: 2s; }
+                .animation-delay-4000 { animation-delay: 4s; }
+            `}</style>
         </div>
     );
 };
