@@ -62,7 +62,7 @@ const Login = () => {
             } else if (roles.includes("SELLER") && roles.includes("BUYER")) {
                 navigate("/home");
             } else if (roles.includes("SELLER")) {
-                navigate("/seller/dashboard");
+                navigate("/sellerHome");
             } else {
                 navigate("/home");
             }
