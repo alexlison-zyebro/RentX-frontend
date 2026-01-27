@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import ForgotPassword from "./components/ForgetPassword";
 import Home from "./components/Home";
 import AdminHome from "./components/AdminHome";
+import SellerHome from "./components/SellerHome";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/home" element={<Home />} />
         <Route path="/adminHome" element={<AdminHome />} />
+        <Route path="/sellerHome" element={<SellerHome />} />
       </Routes>
     </BrowserRouter>
   );

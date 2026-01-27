@@ -5,7 +5,7 @@ import {
   ChevronRight, Filter, ArrowRight, RefreshCw, TrendingUp,
   Users, Sparkles, Edit
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -28,10 +28,6 @@ const Home = () => {
     }
   });
 
-  const [activeRole, setActiveRole] = useState(() => {
-    return userRoles.includes('SELLER') ? 'seller' : 'buyer';
-  });
-
   const canSwitchRoles = userRoles.includes('BUYER') && userRoles.includes('SELLER');
 
   useEffect(() => {
@@ -52,6 +48,7 @@ const Home = () => {
     }
   }, [token, userRoles, navigate]);
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileDropdown && !event.target.closest('.profile-dropdown')) {
@@ -65,10 +62,6 @@ const Home = () => {
   const handleLogout = () => {
     localStorage.clear();
     navigate('/login');
-  };
-
-  const toggleRole = () => {
-    setActiveRole(activeRole === 'buyer' ? 'seller' : 'buyer');
   };
 
   const featuredTools = [
@@ -116,22 +109,20 @@ const Home = () => {
               <a href="#browse" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Browse</a>
               <a href="#categories" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Categories</a>
               <a href="#about" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">About Us</a>
-              {activeRole === 'seller' && (
-                <a href="#my-listings" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">My Listings</a>
-              )}
             </div>
 
             <div className="hidden lg:flex items-center gap-4">
               {canSwitchRoles && (
                 <button
-                  onClick={toggleRole}
+                  onClick={() => navigate('/sellerHome')}
                   className="flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-all border border-gray-200"
                 >
                   <RefreshCw className="w-4 h-4" />
-                  {activeRole === 'buyer' ? 'Seller' : 'Buyer'} Mode
+                  Switch to Seller
                 </button>
               )}
               
+              {/* Profile Dropdown */}
               <div className="relative profile-dropdown">
                 <button
                   onClick={() => setProfileDropdown(!profileDropdown)}
@@ -142,7 +133,7 @@ const Home = () => {
                   </div>
                   <div className="text-left">
                     <div className="text-sm font-bold text-gray-900">{userName}</div>
-                    <div className="text-xs font-semibold text-orange-600 capitalize">{activeRole}</div>
+                    <div className="text-xs font-semibold text-orange-600 capitalize">buyer</div>
                   </div>
                   <ChevronRight className={`w-4 h-4 text-gray-600 transition-transform ${profileDropdown ? 'rotate-90' : ''}`} />
                 </button>
@@ -191,25 +182,25 @@ const Home = () => {
               <a href="#browse" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors">Browse</a>
               <a href="#categories" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors">Categories</a>
               <a href="#about" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors">About Us</a>
-              {activeRole === 'seller' && (
-                <a href="#my-listings" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors">My Listings</a>
-              )}
               {canSwitchRoles && (
-                <button onClick={() => { toggleRole(); setMobileMenu(false); }} className="w-full px-4 py-3 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors flex items-center justify-center gap-2">
+                <button onClick={() => { 
+                  navigate('/sellerHome'); 
+                  setMobileMenu(false); 
+                }} className="w-full px-4 py-3 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors flex items-center justify-center gap-2">
                   <RefreshCw className="w-4 h-4" />
-                  Switch to {activeRole === 'buyer' ? 'Seller' : 'Buyer'}
+                  Switch to Seller
                 </button>
               )}
               <div className="border-t pt-2 mt-2">
                 <div className="px-4 py-3 bg-orange-50 rounded-lg mb-2">
                   <div className="font-bold text-gray-900">{userName}</div>
                   <div className="text-sm text-gray-600">{userEmail}</div>
-                  <div className="text-sm text-orange-600 font-semibold capitalize mt-1">{activeRole}</div>
+                  <div className="text-sm text-orange-600 font-semibold capitalize mt-1">buyer</div>
                 </div>
-                <a href="/profile/edit" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-lg flex items-center gap-2">
+                <Link href="/profile/edit" onClick={() => setMobileMenu(false)} className="px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-lg flex items-center gap-2">
                   <Edit className="w-5 h-5" />
                   Edit Profile
-                </a>
+                </Link>
                 <button onClick={handleLogout} className="w-full px-4 py-3 text-red-600 font-medium hover:bg-red-50 rounded-lg flex items-center justify-center gap-2">
                   <LogOut className="w-5 h-5" />
                   Logout
@@ -229,17 +220,11 @@ const Home = () => {
             </div>
 
             <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
-              {activeRole === 'buyer' ? (
-                <>Find the <span className="text-orange-600">Perfect Tool</span></>
-              ) : (
-                <>List Your Tools &<br /><span className="text-orange-600">Start Earning</span></>
-              )}
+              Find the <span className="text-orange-600">Perfect Tool</span>
             </h1>
 
             <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
-              {activeRole === 'buyer' 
-                ? 'Access professional-grade power tools without the commitment. Rent from verified local sellers and complete your projects efficiently.'
-                : 'Turn your idle equipment into a steady income stream. List your tools and connect with local renters today.'}
+              Access professional-grade power tools without the commitment. Rent from verified local sellers and complete your projects efficiently.
             </p>
           </div>
 
@@ -436,20 +421,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {activeRole === 'seller' && (
-        <section className="py-20 px-4 bg-gradient-to-br from-orange-600 to-orange-700">
-          <div className="max-w-4xl mx-auto text-center">
-            <Package className="w-16 h-16 mx-auto mb-6 text-white opacity-90" />
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">Ready to List Your Tools?</h2>
-            <p className="text-xl text-orange-100 mb-8">Start earning by renting out your power tools. It's quick, easy, and profitable!</p>
-            <button className="inline-flex items-center gap-2 px-10 py-4 bg-white text-orange-600 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-xl">
-              <Package className="w-5 h-5" />
-              Add New Listing
-            </button>
-          </div>
-        </section>
-      )}
 
       <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="max-w-7xl mx-auto text-center">
