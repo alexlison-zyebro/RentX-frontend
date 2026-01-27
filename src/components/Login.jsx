@@ -58,7 +58,7 @@ const Login = () => {
             localStorage.setItem("roles", JSON.stringify(roles));
 
             if (roles.includes("ADMIN")) {
-                navigate("/admin/dashboard");
+                navigate("/adminHome");
             } else if (roles.includes("SELLER") && roles.includes("BUYER")) {
                 navigate("/home");
             } else if (roles.includes("SELLER")) {
