@@ -6,6 +6,7 @@ import {
   Building2, 
   BarChart3, Shield, ShoppingBag, Calendar
 } from 'lucide-react';
+import AdminRequest from './AdminRequest';
 
 const AdminHome = () => {
   const navigate = useNavigate();
@@ -33,7 +34,6 @@ const AdminHome = () => {
   });
 
   useEffect(() => {
-    // Check if user is admin
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Please login to access admin panel.');
@@ -47,16 +47,39 @@ const AdminHome = () => {
       return;
     }
 
-    // Fetch dashboard stats
     const fetchDashboardStats = async () => {
       setIsLoading(true);
       try {
-        // Mock empty data for now
+        // Fetch pending sellers count
+        const pendingResponse = await fetch('http://localhost:4000/api/admin/sellers/pending', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          },
+          body: JSON.stringify({})
+        });
+
+        const pendingData = await pendingResponse.json();
+        const pendingCount = pendingData.status === 'SUCCESS' ? pendingData.data.length : 0;
+
+        const sellersResponse = await fetch('http://localhost:4000/api/admin/sellers/all', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          },
+          body: JSON.stringify({})
+        });
+
+        const sellersData = await sellersResponse.json();
+        const sellersCount = sellersData.status === 'SUCCESS' ? sellersData.data.length : 0;
+
         setStats({
-          totalUsers: 0,
-          totalBuyers: 0,
-          totalSellers: 0,
-          pendingRequests: 0
+          totalUsers: 0, 
+          totalBuyers: 0, 
+          totalSellers: sellersCount,
+          pendingRequests: pendingCount
         });
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
@@ -95,7 +118,6 @@ const AdminHome = () => {
 
     return (
       <div className="space-y-6">
-        {/* Welcome Card */}
         <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-8 text-white">
           <div className="flex items-center justify-between">
             <div>
@@ -106,7 +128,6 @@ const AdminHome = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
             <div className="flex items-center justify-between">
@@ -169,29 +190,56 @@ const AdminHome = () => {
           </div>
         </div>
 
-        {/* Empty State for Content */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-12 text-center">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <BarChart3 className="w-10 h-10 text-gray-400" />
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button 
+              onClick={() => setActiveTab('requests')}
+              className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+                <div className="text-left">
+                  <div className="font-semibold text-gray-900">View Pending Requests</div>
+                  <div className="text-sm text-gray-600 mt-1">{stats.pendingRequests} requests waiting</div>
+                </div>
+              </div>
+            </button>
+            
+            <button className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <div className="text-left">
+                  <div className="font-semibold text-gray-900">Manage Users</div>
+                  <div className="text-sm text-gray-600 mt-1">View all platform users</div>
+                </div>
+              </div>
+            </button>
+            
+            <button className="p-6 bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                  <Package className="w-5 h-5 text-white" />
+                </div>
+                <div className="text-left">
+                  <div className="font-semibold text-gray-900">Sellers List</div>
+                  <div className="text-sm text-gray-600 mt-1">{stats.totalSellers} sellers registered</div>
+                </div>
+              </div>
+            </button>
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">No Data Available</h3>
-          <p className="text-gray-600 mb-6">Data will appear here once users start using the platform.</p>
-          <button className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors">
-            Refresh Data
-          </button>
         </div>
       </div>
     );
   };
 
   const renderRequests = () => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
-      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-        <Shield className="w-8 h-8 text-gray-400" />
-      </div>
-      <h3 className="text-2xl font-bold text-gray-900 mb-3">Verification Requests</h3>
-      <p className="text-gray-600 mb-6">Manage user verification requests here.</p>
-      <div className="text-sm text-gray-500">No pending requests at the moment.</div>
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+      <AdminRequest />
     </div>
   );
 
@@ -244,7 +292,6 @@ const AdminHome = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Mobile Menu Button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg"
         onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
@@ -252,13 +299,11 @@ const AdminHome = () => {
         {mobileSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
 
-      {/* Sidebar */}
       <aside className={`
         fixed top-0 left-0 h-full bg-white shadow-2xl z-40 transition-all duration-300
         w-64
         ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
@@ -271,7 +316,6 @@ const AdminHome = () => {
           </div>
         </div>
 
-        {/* Navigation Menu */}
         <nav className="p-4 space-y-1">
           {menuItems.map((item) => (
             <button
@@ -295,21 +339,21 @@ const AdminHome = () => {
         </nav>
       </aside>
 
-      {/* Main Content Area */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
-        {/* Top Navigation Bar */}
-        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
+        <header className="bg-orange-100 shadow-sm border-b border-gray-200 sticky top-0 z-30">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-black text-gray-900 capitalize">{activeTab}</h1>
+                <h1 className="text-2xl font-black text-gray-900 capitalize">
+                  {activeTab === 'requests' ? 'Seller Approval Requests' : activeTab}
+                </h1>
                 <p className="text-sm text-gray-600">Manage your platform</p>
               </div>
               
               <div className="flex items-center gap-4">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-500 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   Logout
@@ -319,7 +363,6 @@ const AdminHome = () => {
           </div>
         </header>
 
-        {/* Page Content - This will grow and push footer down */}
         <div className="flex-1 p-6">
           {renderTabContent()}
         </div>
@@ -337,7 +380,6 @@ const AdminHome = () => {
         </footer>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
       {mobileSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 lg:hidden z-30"

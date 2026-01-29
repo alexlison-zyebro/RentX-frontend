@@ -6,6 +6,7 @@ import ForgotPassword from "./components/ForgetPassword";
 import Home from "./components/Home";
 import AdminHome from "./components/AdminHome";
 import SellerHome from "./components/SellerHome";
+import AdminRequest from "./components/AdminRequest";
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/home" element={<Home />} />
         <Route path="/adminHome" element={<AdminHome />} />
+        <Route path="/adminRequest" element={<AdminRequest />} />
         <Route path="/sellerHome" element={<SellerHome />} />
+ 
       </Routes>
     </BrowserRouter>
   );
