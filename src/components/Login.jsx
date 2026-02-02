@@ -52,8 +52,8 @@ const Login = () => {
                 form
             );
 
-            const { token, roles } = res.data;
-
+            const { token, roles, userId } = res.data;
+            localStorage.setItem("userId",JSON.stringify(userId));
             localStorage.setItem("token", token);
             localStorage.setItem("roles", JSON.stringify(roles));
 
