@@ -4,7 +4,9 @@ import {
   Package, ListPlus, DollarSign, TrendingUp,
   LogOut, Menu, X, Home, 
   Building2, ShoppingBag, BarChart3, Clock,
-  CheckCircle, XCircle, Eye, Edit, Trash2, Plus
+  Plus, CheckCircle, Shield,
+  Crown, CreditCard,
+  Award
 } from 'lucide-react';
 
 const SellerHome = () => {
@@ -12,6 +14,10 @@ const SellerHome = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [userName] = useState(localStorage.getItem('userName') || 'Seller');
   const [isLoading, setIsLoading] = useState(true);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState('none');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [subscriptionMessage, setSubscriptionMessage] = useState('');
   
   const [stats, setStats] = useState({
     activeListings: 0,
@@ -21,48 +27,160 @@ const SellerHome = () => {
   });
 
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [userRoles] = useState(() => {
-    const rolesStr = localStorage.getItem('roles');
-    if (!rolesStr) return [];
-    try {
-      return JSON.parse(rolesStr);
-    } catch (e) {
-      console.log(e);
-      return [];
-    }
-  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Please login to access seller panel.');
       navigate('/login');
       return;
     }
 
-    if (!userRoles.includes('SELLER')) {
-      alert('Unauthorized access. Seller privileges required.');
+    const rolesStr = localStorage.getItem('roles') || '[]';
+    let roles = [];
+    try {
+      roles = JSON.parse(rolesStr);
+    } catch (e) {
+       console.log("error->",e);
       navigate('/home');
       return;
     }
-    const fetchSellerStats = async () => {
-      setIsLoading(true);
-      try {
-        setStats({
-          activeListings: 0,
-          totalEarnings: 0,
-          totalRentals: 0,
-          pendingRequests: 0
-        });
-      } catch (error) {
-        console.error('Error fetching seller stats:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
-    fetchSellerStats();
-  }, [navigate, userRoles]);
+    if (!roles.includes('SELLER')) {
+      navigate('/home');
+      return;
+    }
+    
+    let userId = localStorage.getItem('userId');
+    if (userId && userId.includes('"')) {
+      userId = userId.replace(/"/g, '').trim();
+      localStorage.setItem('userId', userId);
+    }
+    
+    // Load subscription status
+    fetchSubscriptionStatus();
+    
+    // Fetch stats
+    setIsLoading(false);
+    setStats({
+      activeListings: 0,
+      totalEarnings: 0,
+      totalRentals: 0,
+      pendingRequests: 0
+    });
+  }, [navigate]);
+
+  const fetchSubscriptionStatus = async () => {
+    const token = localStorage.getItem('token');
+    let userId = localStorage.getItem('userId');
+    
+    if (!token || !userId) return;
+
+    try {
+      userId = userId.replace(/"/g, '').trim();
+      
+      const response = await fetch('http://localhost:4000/api/seller/subscription/status', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      const result = await response.json();
+      
+      if (result.status === 'SUCCESS') {
+        const data = result.data;
+        
+        if (data.isSubscribed === true) {
+          // Check if subscription is still valid
+          if (data.subscriptionEndDate) {
+            const endDate = new Date(data.subscriptionEndDate);
+            const now = new Date();
+            if (endDate > now) {
+              setSubscriptionStatus('active');
+              localStorage.setItem('subscriptionStatus', 'active');
+            } else {
+              setSubscriptionStatus('expired');
+              localStorage.setItem('subscriptionStatus', 'expired');
+            }
+          } else {
+            setSubscriptionStatus('active');
+            localStorage.setItem('subscriptionStatus', 'active');
+          }
+        } else {
+          setSubscriptionStatus('none');
+          localStorage.setItem('subscriptionStatus', 'none');
+        }
+      }
+    } catch (error) {
+       console.log("error->",error);
+      const saved = localStorage.getItem('subscriptionStatus') || 'none';
+      setSubscriptionStatus(saved);
+    }
+  };
+
+  const handleSubscribe = async () => {
+    const token = localStorage.getItem('token');
+    let userId = localStorage.getItem('userId');
+    
+    if (!token || !userId) {
+      setSubscriptionMessage('Please login again');
+      return;
+    }
+
+    setIsProcessing(true);
+    setSubscriptionMessage('');
+
+    try {
+      userId = userId.replace(/"/g, '').trim();
+      
+      const response = await fetch('http://localhost:4000/api/seller/subscription/activate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      const result = await response.json();
+      
+      if (result.status === 'SUCCESS') {
+        setSubscriptionMessage('Subscription activated successfully!');
+        setSubscriptionStatus('active');
+        localStorage.setItem('subscriptionStatus', 'active');
+        
+        setTimeout(() => {
+          setShowSubscriptionModal(false);
+          fetchSubscriptionStatus();
+        }, 2000);
+        
+      } else if (result.status === 'ALREADY_SUBSCRIBED') {
+        setSubscriptionMessage('You already have an active subscription!');
+        setSubscriptionStatus('active');
+        localStorage.setItem('subscriptionStatus', 'active');
+        
+        setTimeout(() => {
+          setShowSubscriptionModal(false);
+          fetchSubscriptionStatus();
+        }, 2000);
+        
+      } else if (result.status === 'NOT_SELLER') {
+        setSubscriptionMessage('Only sellers can subscribe');
+      } else if (result.status === 'USER_NOT_FOUND') {
+        setSubscriptionMessage('User not found');
+      } else {
+        setSubscriptionMessage(result.message || 'Subscription failed');
+      }
+    } catch (error) {
+      console.log("error->",error);
+
+      setSubscriptionMessage('Network error. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -76,6 +194,69 @@ const SellerHome = () => {
     { id: 'bookings', label: 'Bookings', icon: <ShoppingBag className="w-5 h-5" /> },
     { id: 'earnings', label: 'Earnings', icon: <DollarSign className="w-5 h-5" /> },
   ];
+
+  const renderSubscriptionBanner = () => {
+    if (subscriptionStatus === 'active') return null;
+    
+    return (
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-6 text-white mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-bold mb-2">
+              {subscriptionStatus === 'expired' ? 'Subscription Expired' : 'Upgrade to Seller Pro'}
+            </h3>
+            <p className="text-orange-100">
+              {subscriptionStatus === 'expired' 
+                ? 'Renew your subscription to continue selling'
+                : 'Subscribe to unlock all seller features'
+              }
+            </p>
+          </div>
+          <button
+            onClick={() => setShowSubscriptionModal(true)}
+            className="px-6 py-2 bg-white text-orange-600 font-bold rounded-lg hover:bg-orange-50 transition-colors"
+          >
+            {subscriptionStatus === 'expired' ? 'Renew Now' : 'Subscribe Now'}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderTabContent = () => {
+    const canAccess = subscriptionStatus === 'active';
+    
+    switch (activeTab) {
+      case 'dashboard':
+        return renderDashboard();
+      case 'listings':
+        return canAccess ? renderListings() : renderRestricted('listings');
+      case 'add-listing':
+        return canAccess ? renderAddListing() : renderRestricted('add-listing');
+      case 'bookings':
+        return canAccess ? renderBookings() : renderRestricted('bookings');
+      case 'earnings':
+        return canAccess ? renderEarnings() : renderRestricted('earnings');
+      default:
+        return renderDashboard();
+    }
+  };
+
+  const renderRestricted = (tabName) => (
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-12 text-center">
+      <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <Package className="w-10 h-10 text-red-600" />
+      </div>
+      <h3 className="text-2xl font-bold text-gray-900 mb-3">Subscription Required</h3>
+      <p className="text-gray-600 mb-6">You need an active subscription to access {tabName} features.</p>
+      <button 
+        onClick={() => setShowSubscriptionModal(true)}
+        className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors"
+      >
+        Subscribe Now
+      </button>
+    </div>
+  );
 
   const renderDashboard = () => {
     if (isLoading) {
@@ -91,123 +272,121 @@ const SellerHome = () => {
 
     return (
       <div className="space-y-6">
+        {renderSubscriptionBanner()}
+        
         <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-black mb-2">Welcome, {userName}!</h1>
               <p className="text-orange-100">Manage your tool rentals and earnings from here.</p>
+              {subscriptionStatus === 'active' && (
+                <div className="mt-3 text-sm text-orange-100 bg-white/10 px-3 py-1 rounded-lg inline-block">
+                  <span className="font-semibold">Pro Seller</span>
+                </div>
+              )}
             </div>
             <Building2 className="w-16 h-16 opacity-20" />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Active Listings</p>
-                <h3 className="text-3xl font-black text-gray-900">{stats.activeListings}</h3>
+        {subscriptionStatus === 'active' ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Active Listings</p>
+                    <h3 className="text-3xl font-black text-gray-900">{stats.activeListings}</h3>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Package className="w-6 h-6 text-white" />
+                  </div>
+                </div>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                <Package className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="text-sm text-gray-600">Tools available for rent</div>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Total Earnings</p>
-                <h3 className="text-3xl font-black text-gray-900">₹{stats.totalEarnings.toLocaleString()}</h3>
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Total Earnings</p>
+                    <h3 className="text-3xl font-black text-gray-900">₹{stats.totalEarnings.toLocaleString()}</h3>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-white" />
+                  </div>
+                </div>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="text-sm text-gray-600">Earned from rentals</div>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Total Rentals</p>
-                <h3 className="text-3xl font-black text-gray-900">{stats.totalRentals}</h3>
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Total Rentals</p>
+                    <h3 className="text-3xl font-black text-gray-900">{stats.totalRentals}</h3>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <ShoppingBag className="w-6 h-6 text-white" />
+                  </div>
+                </div>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <ShoppingBag className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="text-sm text-gray-600">Completed bookings</div>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Pending Requests</p>
-                <h3 className="text-3xl font-black text-gray-900">{stats.pendingRequests}</h3>
-              </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
-                <Clock className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">Pending Requests</p>
+                    <h3 className="text-3xl font-black text-gray-900">{stats.pendingRequests}</h3>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-white" />
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="mt-4">
-              <div className="text-sm text-gray-600">Awaiting confirmation</div>
-            </div>
-          </div>
-        </div>
 
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button 
-              onClick={() => setActiveTab('add-listing')}
-              className="p-4 bg-orange-50 border-2 border-orange-200 rounded-xl hover:bg-orange-100 transition-colors text-center"
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button 
+                  onClick={() => setActiveTab('add-listing')}
+                  className="p-4 bg-orange-50 border-2 border-orange-200 rounded-xl hover:bg-orange-100 transition-colors text-center"
+                >
+                  <Plus className="w-8 h-8 text-orange-600 mx-auto mb-2" />
+                  <div className="font-semibold text-orange-700">Add New Listing</div>
+                </button>
+                
+                <button 
+                  onClick={() => setActiveTab('listings')}
+                  className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl hover:bg-blue-100 transition-colors text-center"
+                >
+                  <Package className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <div className="font-semibold text-blue-700">Manage Listings</div>
+                </button>
+                
+                <button 
+                  onClick={() => setActiveTab('earnings')}
+                  className="p-4 bg-green-50 border-2 border-green-200 rounded-xl hover:bg-green-100 transition-colors text-center"
+                >
+                  <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                  <div className="font-semibold text-green-700">View Earnings</div>
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-12 text-center">
+            <div className="w-24 h-24 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Shield className="w-12 h-12 text-orange-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Upgrade to Seller Pro</h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+              Subscribe to unlock unlimited listings, booking management, earnings dashboard, and priority support.
+            </p>
+            <button
+              onClick={() => setShowSubscriptionModal(true)}
+              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all"
             >
-              <Plus className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-              <div className="font-semibold text-orange-700">Add New Listing</div>
-              <div className="text-sm text-orange-600">List your tool for rent</div>
-            </button>
-            
-            <button 
-              onClick={() => setActiveTab('listings')}
-              className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl hover:bg-blue-100 transition-colors text-center"
-            >
-              <Package className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <div className="font-semibold text-blue-700">Manage Listings</div>
-              <div className="text-sm text-blue-600">View & edit your tools</div>
-            </button>
-            
-            <button 
-              onClick={() => setActiveTab('earnings')}
-              className="p-4 bg-green-50 border-2 border-green-200 rounded-xl hover:bg-green-100 transition-colors text-center"
-            >
-              <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
-              <div className="font-semibold text-green-700">View Earnings</div>
-              <div className="text-sm text-green-600">Track your income</div>
+              Subscribe Now
             </button>
           </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-12 text-center">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <BarChart3 className="w-10 h-10 text-gray-400" />
-          </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">No Activity Yet</h3>
-          <p className="text-gray-600 mb-6">Start listing your tools to see activity here.</p>
-          <button 
-            onClick={() => setActiveTab('add-listing')}
-            className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors"
-          >
-            List Your First Tool
-          </button>
-        </div>
+        )}
       </div>
     );
   };
@@ -225,17 +404,9 @@ const SellerHome = () => {
         </button>
       </div>
       <div className="text-center py-12">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Package className="w-10 h-10 text-gray-400" />
-        </div>
-        <h4 className="text-xl font-bold text-gray-900 mb-2">No Listings Yet</h4>
-        <p className="text-gray-600 mb-6">Start earning by listing your tools for rent.</p>
-        <button 
-          onClick={() => setActiveTab('add-listing')}
-          className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors"
-        >
-          Create Your First Listing
-        </button>
+        <Package className="w-20 h-20 text-gray-400 mx-auto mb-6" />
+        <h4 className="text-xl font-bold text-gray-900 mb-3">My Listings</h4>
+        <p className="text-gray-600 mb-6">You haven't listed any tools yet.</p>
       </div>
     </div>
   );
@@ -243,60 +414,18 @@ const SellerHome = () => {
   const renderAddListing = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
       <h3 className="text-2xl font-bold text-gray-900 mb-6">Add New Listing</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Tool Name</label>
-          <input
-            type="text"
-            placeholder="e.g., DeWalt Cordless Drill"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Daily Price (₹)</label>
-          <input
-            type="number"
-            placeholder="e.g., 299"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
-          />
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-          <textarea
-            placeholder="Describe your tool, its condition, and any special features..."
-            rows="4"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-          <select className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
-            <option value="">Select Category</option>
-            <option value="drills">Power Drills</option>
-            <option value="saws">Saws</option>
-            <option value="grinders">Grinders</option>
-            <option value="sanders">Sanders</option>
-            <option value="painting">Painting Tools</option>
-            <option value="welding">Welding Equipment</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-          <input
-            type="text"
-            placeholder="Your city/town"
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
-          />
-        </div>
-      </div>
-      <div className="mt-8 flex justify-end gap-4">
-        <button 
-          onClick={() => setActiveTab('listings')}
-          className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
-        >
-          Cancel
-        </button>
-        <button className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors">
+      <div className="space-y-4">
+        <input
+          type="text"
+          placeholder="Tool Name"
+          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl"
+        />
+        <input
+          type="number"
+          placeholder="Daily Price (₹)"
+          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl"
+        />
+        <button className="w-full px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors">
           Create Listing
         </button>
       </div>
@@ -307,10 +436,8 @@ const SellerHome = () => {
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
       <h3 className="text-2xl font-bold text-gray-900 mb-6">Bookings</h3>
       <div className="text-center py-12">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <ShoppingBag className="w-10 h-10 text-gray-400" />
-        </div>
-        <h4 className="text-xl font-bold text-gray-900 mb-2">No Bookings Yet</h4>
+        <ShoppingBag className="w-20 h-20 text-gray-400 mx-auto mb-6" />
+        <h4 className="text-xl font-bold text-gray-900 mb-3">No Bookings Yet</h4>
         <p className="text-gray-600">Booking requests will appear here once customers rent your tools.</p>
       </div>
     </div>
@@ -325,10 +452,8 @@ const SellerHome = () => {
         </div>
       </div>
       <div className="text-center py-12">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <DollarSign className="w-10 h-10 text-gray-400" />
-        </div>
-        <h4 className="text-xl font-bold text-gray-900 mb-2">No Earnings Yet</h4>
+        <DollarSign className="w-20 h-20 text-gray-400 mx-auto mb-6" />
+        <h4 className="text-xl font-bold text-gray-900 mb-3">No Earnings Yet</h4>
         <p className="text-gray-600 mb-6">Start earning by renting out your tools.</p>
         <button 
           onClick={() => setActiveTab('add-listing')}
@@ -340,22 +465,98 @@ const SellerHome = () => {
     </div>
   );
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return renderDashboard();
-      case 'listings':
-        return renderListings();
-      case 'add-listing':
-        return renderAddListing();
-      case 'bookings':
-        return renderBookings();
-      case 'earnings':
-        return renderEarnings();
-      default:
-        return renderDashboard();
-    }
-  };
+  const SubscriptionModal = () => (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-2xl w-full max-w-2xl">
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 rounded-t-2xl text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Crown className="w-6 h-6" />
+              <h2 className="text-xl font-bold">
+                {subscriptionStatus === 'expired' ? 'Renew Subscription' : 'Subscribe to Seller Pro'}
+              </h2>
+            </div>
+            <button onClick={() => setShowSubscriptionModal(false)}>
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6">
+          {subscriptionMessage && (
+            <div className={`mb-4 p-3 rounded-lg ${
+              subscriptionMessage.includes('successfully') ? 'bg-green-50 text-green-700' : 
+              subscriptionMessage.includes('already') ? 'bg-yellow-50 text-yellow-700' : 'bg-red-50 text-red-700'
+            }`}>
+              {subscriptionMessage}
+            </div>
+          )}
+
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-5">
+              <div className="text-center mb-4">
+                <Award className="w-10 h-10 text-orange-600 mx-auto mb-3" />
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Seller Pro Plan</h3>
+                <div className="mb-2">
+                  <span className="text-3xl font-bold text-orange-600">₹699</span>
+                  <span className="text-gray-600">/year</span>
+                </div>
+                <div className="bg-white border border-orange-300 rounded-lg p-2">
+                  <div className="text-xs text-gray-700">Cancel anytime</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="font-bold text-gray-900">What's included:</h4>
+              {['Unlimited product listings', 'Booking management', 'Earnings dashboard', 'Priority support', 'Secure payments'].map((feature, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <span className="text-sm">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              onClick={handleSubscribe}
+              disabled={isProcessing || subscriptionStatus === 'active'}
+              className={`flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2
+                ${subscriptionStatus === 'active' 
+                  ? 'bg-green-600 text-white cursor-default' 
+                  : 'bg-orange-600 text-white hover:bg-orange-700 disabled:opacity-70'
+                }`}
+            >
+              {isProcessing ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Processing...
+                </>
+              ) : subscriptionStatus === 'active' ? (
+                <>
+                  <CheckCircle className="w-5 h-5" />
+                  Already Subscribed
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-5 h-5" />
+                  {subscriptionStatus === 'expired' ? 'Renew - ₹699' : 'Subscribe - ₹699'}
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => setShowSubscriptionModal(false)}
+              className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200"
+            >
+              {subscriptionStatus === 'active' ? 'Close' : 'Later'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -391,12 +592,14 @@ const SellerHome = () => {
                 setActiveTab(item.id);
                 setMobileSidebarOpen(false);
               }}
+              disabled={subscriptionStatus !== 'active' && item.id !== 'dashboard'}
               className={`
                 w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all
                 ${activeTab === item.id 
                   ? 'bg-orange-50 text-orange-600 font-semibold' 
                   : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600'
                 }
+                ${subscriptionStatus !== 'active' && item.id !== 'dashboard' ? 'opacity-50 cursor-not-allowed' : ''}
               `}
             >
               {item.icon}
@@ -434,18 +637,16 @@ const SellerHome = () => {
             </div>
           </div>
         </header>
-
         <div className="flex-1 p-6">
           {renderTabContent()}
         </div>
-
         <footer className="px-6 py-4 border-t border-gray-200 bg-white">
           <div className="flex justify-between items-center">
             <div className="text-sm text-gray-600">
               © 2026 RentX Seller Panel. All rights reserved.
             </div>
             <div className="text-sm text-gray-600">
-              Seller Account
+              {subscriptionStatus === 'active' ? 'Active Subscription' : 'Subscription Required'}
             </div>
           </div>
         </footer>
@@ -457,6 +658,7 @@ const SellerHome = () => {
           onClick={() => setMobileSidebarOpen(false)}
         />
       )}
+      {showSubscriptionModal && <SubscriptionModal />}
     </div>
   );
 };
