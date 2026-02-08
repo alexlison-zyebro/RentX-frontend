@@ -4,9 +4,11 @@ import {
   Users, Package, 
   LogOut, Menu, X,
   Building2, 
-  BarChart3, Shield, ShoppingBag, Calendar
+  BarChart3, Shield, ShoppingBag, Calendar,
+  Layers
 } from 'lucide-react';
 import AdminRequest from './AdminRequest';
+import CategoryManagement from './CategoryManagement';
 
 const AdminHome = () => {
   const navigate = useNavigate();
@@ -101,6 +103,7 @@ const AdminHome = () => {
     { id: 'requests', label: 'Requests', icon: <Shield className="w-5 h-5" /> },
     { id: 'buyers', label: 'Buyers', icon: <Users className="w-5 h-5" /> },
     { id: 'sellers', label: 'Sellers', icon: <Package className="w-5 h-5" /> },
+    { id: 'category', label: 'Category', icon: <Layers className="w-5 h-5" /> },
     { id: 'bookings', label: 'Bookings', icon: <Calendar className="w-5 h-5" /> },
   ];
 
@@ -263,6 +266,15 @@ const AdminHome = () => {
     </div>
   );
 
+
+    const renderCategory = () => (
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
+    
+         
+         <CategoryManagement />
+    </div>
+  );
+
   const renderBookings = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
       <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -285,6 +297,8 @@ const AdminHome = () => {
         return renderSellers();
       case 'bookings':
         return renderBookings();
+      case 'category':
+        return renderCategory();  
       default:
         return renderDashboard();
     }
