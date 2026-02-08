@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   Package, ListPlus, DollarSign, TrendingUp,
-  LogOut, Menu, X, Home, 
+  LogOut, Menu, X, Home,
   Building2, ShoppingBag, BarChart3, Clock,
   Plus, CheckCircle, Shield,
   Crown, CreditCard,
   Award
 } from 'lucide-react';
+import ProductManagement from './ProductManagement';
 
 const SellerHome = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const SellerHome = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState('none');
   const [isProcessing, setIsProcessing] = useState(false);
   const [subscriptionMessage, setSubscriptionMessage] = useState('');
-  
+
   const [stats, setStats] = useState({
     activeListings: 0,
     totalEarnings: 0,
@@ -40,7 +41,7 @@ const SellerHome = () => {
     try {
       roles = JSON.parse(rolesStr);
     } catch (e) {
-       console.log("error->",e);
+      console.log("error->", e);
       navigate('/home');
       return;
     }
@@ -49,16 +50,16 @@ const SellerHome = () => {
       navigate('/home');
       return;
     }
-    
+
     let userId = localStorage.getItem('userId');
     if (userId && userId.includes('"')) {
       userId = userId.replace(/"/g, '').trim();
       localStorage.setItem('userId', userId);
     }
-    
+
     // Load subscription status
     fetchSubscriptionStatus();
-    
+
     // Fetch stats
     setIsLoading(false);
     setStats({
@@ -72,12 +73,12 @@ const SellerHome = () => {
   const fetchSubscriptionStatus = async () => {
     const token = localStorage.getItem('token');
     let userId = localStorage.getItem('userId');
-    
+
     if (!token || !userId) return;
 
     try {
       userId = userId.replace(/"/g, '').trim();
-      
+
       const response = await fetch('http://localhost:4000/api/seller/subscription/status', {
         method: 'POST',
         headers: {
@@ -88,10 +89,10 @@ const SellerHome = () => {
       });
 
       const result = await response.json();
-      
+
       if (result.status === 'SUCCESS') {
         const data = result.data;
-        
+
         if (data.isSubscribed === true) {
           // Check if subscription is still valid
           if (data.subscriptionEndDate) {
@@ -114,7 +115,7 @@ const SellerHome = () => {
         }
       }
     } catch (error) {
-       console.log("error->",error);
+      console.log("error->", error);
       const saved = localStorage.getItem('subscriptionStatus') || 'none';
       setSubscriptionStatus(saved);
     }
@@ -123,7 +124,7 @@ const SellerHome = () => {
   const handleSubscribe = async () => {
     const token = localStorage.getItem('token');
     let userId = localStorage.getItem('userId');
-    
+
     if (!token || !userId) {
       setSubscriptionMessage('Please login again');
       return;
@@ -134,7 +135,7 @@ const SellerHome = () => {
 
     try {
       userId = userId.replace(/"/g, '').trim();
-      
+
       const response = await fetch('http://localhost:4000/api/seller/subscription/activate', {
         method: 'POST',
         headers: {
@@ -145,27 +146,27 @@ const SellerHome = () => {
       });
 
       const result = await response.json();
-      
+
       if (result.status === 'SUCCESS') {
         setSubscriptionMessage('Subscription activated successfully!');
         setSubscriptionStatus('active');
         localStorage.setItem('subscriptionStatus', 'active');
-        
+
         setTimeout(() => {
           setShowSubscriptionModal(false);
           fetchSubscriptionStatus();
         }, 2000);
-        
+
       } else if (result.status === 'ALREADY_SUBSCRIBED') {
         setSubscriptionMessage('You already have an active subscription!');
         setSubscriptionStatus('active');
         localStorage.setItem('subscriptionStatus', 'active');
-        
+
         setTimeout(() => {
           setShowSubscriptionModal(false);
           fetchSubscriptionStatus();
         }, 2000);
-        
+
       } else if (result.status === 'NOT_SELLER') {
         setSubscriptionMessage('Only sellers can subscribe');
       } else if (result.status === 'USER_NOT_FOUND') {
@@ -174,7 +175,7 @@ const SellerHome = () => {
         setSubscriptionMessage(result.message || 'Subscription failed');
       }
     } catch (error) {
-      console.log("error->",error);
+      console.log("error->", error);
 
       setSubscriptionMessage('Network error. Please try again.');
     } finally {
@@ -190,14 +191,13 @@ const SellerHome = () => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'listings', label: 'My Listings', icon: <Package className="w-5 h-5" /> },
-    { id: 'add-listing', label: 'Add Listing', icon: <ListPlus className="w-5 h-5" /> },
     { id: 'bookings', label: 'Bookings', icon: <ShoppingBag className="w-5 h-5" /> },
     { id: 'earnings', label: 'Earnings', icon: <DollarSign className="w-5 h-5" /> },
   ];
 
   const renderSubscriptionBanner = () => {
     if (subscriptionStatus === 'active') return null;
-    
+
     return (
       <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-6 text-white mb-6">
         <div className="flex items-center justify-between">
@@ -206,7 +206,7 @@ const SellerHome = () => {
               {subscriptionStatus === 'expired' ? 'Subscription Expired' : 'Upgrade to Seller Pro'}
             </h3>
             <p className="text-orange-100">
-              {subscriptionStatus === 'expired' 
+              {subscriptionStatus === 'expired'
                 ? 'Renew your subscription to continue selling'
                 : 'Subscribe to unlock all seller features'
               }
@@ -225,14 +225,12 @@ const SellerHome = () => {
 
   const renderTabContent = () => {
     const canAccess = subscriptionStatus === 'active';
-    
+
     switch (activeTab) {
       case 'dashboard':
         return renderDashboard();
       case 'listings':
         return canAccess ? renderListings() : renderRestricted('listings');
-      case 'add-listing':
-        return canAccess ? renderAddListing() : renderRestricted('add-listing');
       case 'bookings':
         return canAccess ? renderBookings() : renderRestricted('bookings');
       case 'earnings':
@@ -249,7 +247,7 @@ const SellerHome = () => {
       </div>
       <h3 className="text-2xl font-bold text-gray-900 mb-3">Subscription Required</h3>
       <p className="text-gray-600 mb-6">You need an active subscription to access {tabName} features.</p>
-      <button 
+      <button
         onClick={() => setShowSubscriptionModal(true)}
         className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors"
       >
@@ -273,7 +271,7 @@ const SellerHome = () => {
     return (
       <div className="space-y-6">
         {renderSubscriptionBanner()}
-        
+
         <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-8 text-white">
           <div className="flex items-center justify-between">
             <div>
@@ -344,23 +342,23 @@ const SellerHome = () => {
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button 
+                <button
                   onClick={() => setActiveTab('add-listing')}
                   className="p-4 bg-orange-50 border-2 border-orange-200 rounded-xl hover:bg-orange-100 transition-colors text-center"
                 >
                   <Plus className="w-8 h-8 text-orange-600 mx-auto mb-2" />
                   <div className="font-semibold text-orange-700">Add New Listing</div>
                 </button>
-                
-                <button 
+
+                <button
                   onClick={() => setActiveTab('listings')}
                   className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl hover:bg-blue-100 transition-colors text-center"
                 >
                   <Package className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                   <div className="font-semibold text-blue-700">Manage Listings</div>
                 </button>
-                
-                <button 
+
+                <button
                   onClick={() => setActiveTab('earnings')}
                   className="p-4 bg-green-50 border-2 border-green-200 rounded-xl hover:bg-green-100 transition-colors text-center"
                 >
@@ -392,45 +390,11 @@ const SellerHome = () => {
   };
 
   const renderListings = () => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-gray-900">My Listings</h3>
-        <button 
-          onClick={() => setActiveTab('add-listing')}
-          className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Add New Listing
-        </button>
-      </div>
-      <div className="text-center py-12">
-        <Package className="w-20 h-20 text-gray-400 mx-auto mb-6" />
-        <h4 className="text-xl font-bold text-gray-900 mb-3">My Listings</h4>
-        <p className="text-gray-600 mb-6">You haven't listed any tools yet.</p>
-      </div>
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+      <ProductManagement />
     </div>
   );
 
-  const renderAddListing = () => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-      <h3 className="text-2xl font-bold text-gray-900 mb-6">Add New Listing</h3>
-      <div className="space-y-4">
-        <input
-          type="text"
-          placeholder="Tool Name"
-          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl"
-        />
-        <input
-          type="number"
-          placeholder="Daily Price (₹)"
-          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl"
-        />
-        <button className="w-full px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors">
-          Create Listing
-        </button>
-      </div>
-    </div>
-  );
 
   const renderBookings = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
@@ -455,7 +419,7 @@ const SellerHome = () => {
         <DollarSign className="w-20 h-20 text-gray-400 mx-auto mb-6" />
         <h4 className="text-xl font-bold text-gray-900 mb-3">No Earnings Yet</h4>
         <p className="text-gray-600 mb-6">Start earning by renting out your tools.</p>
-        <button 
+        <button
           onClick={() => setActiveTab('add-listing')}
           className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors"
         >
@@ -484,10 +448,9 @@ const SellerHome = () => {
 
         <div className="p-6">
           {subscriptionMessage && (
-            <div className={`mb-4 p-3 rounded-lg ${
-              subscriptionMessage.includes('successfully') ? 'bg-green-50 text-green-700' : 
-              subscriptionMessage.includes('already') ? 'bg-yellow-50 text-yellow-700' : 'bg-red-50 text-red-700'
-            }`}>
+            <div className={`mb-4 p-3 rounded-lg ${subscriptionMessage.includes('successfully') ? 'bg-green-50 text-green-700' :
+                subscriptionMessage.includes('already') ? 'bg-yellow-50 text-yellow-700' : 'bg-red-50 text-red-700'
+              }`}>
               {subscriptionMessage}
             </div>
           )}
@@ -523,8 +486,8 @@ const SellerHome = () => {
               onClick={handleSubscribe}
               disabled={isProcessing || subscriptionStatus === 'active'}
               className={`flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2
-                ${subscriptionStatus === 'active' 
-                  ? 'bg-green-600 text-white cursor-default' 
+                ${subscriptionStatus === 'active'
+                  ? 'bg-green-600 text-white cursor-default'
                   : 'bg-orange-600 text-white hover:bg-orange-700 disabled:opacity-70'
                 }`}
             >
@@ -595,8 +558,8 @@ const SellerHome = () => {
               disabled={subscriptionStatus !== 'active' && item.id !== 'dashboard'}
               className={`
                 w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all
-                ${activeTab === item.id 
-                  ? 'bg-orange-50 text-orange-600 font-semibold' 
+                ${activeTab === item.id
+                  ? 'bg-orange-50 text-orange-600 font-semibold'
                   : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600'
                 }
                 ${subscriptionStatus !== 'active' && item.id !== 'dashboard' ? 'opacity-50 cursor-not-allowed' : ''}
@@ -617,9 +580,9 @@ const SellerHome = () => {
                 <h1 className="text-2xl font-black text-gray-900 capitalize">{activeTab.replace('-', ' ')}</h1>
                 <p className="text-sm text-gray-600">Manage your tool rentals</p>
               </div>
-              
+
               <div className="flex items-center gap-4">
-                <button 
+                <button
                   onClick={() => navigate('/home')}
                   className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
                 >
@@ -653,7 +616,7 @@ const SellerHome = () => {
       </div>
 
       {mobileSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 lg:hidden z-30"
           onClick={() => setMobileSidebarOpen(false)}
         />
