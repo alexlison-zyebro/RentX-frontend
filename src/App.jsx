@@ -7,6 +7,8 @@ import Home from "./components/Home";
 import AdminHome from "./components/AdminHome";
 import SellerHome from "./components/SellerHome";
 import AdminRequest from "./components/AdminRequest";
+import CategoryManagement from "./components/CategoryManagement";
+import ProductManagement from "./components/ProductManagement";
 
 function App() {
   return (
@@ -19,7 +21,9 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/adminHome" element={<AdminHome />} />
         <Route path="/adminRequest" element={<AdminRequest />} />
+        <Route path="/category" element={<CategoryManagement />} />
         <Route path="/sellerHome" element={<SellerHome />} />
+        <Route path="/productManagement" element={<ProductManagement />} />
  
       </Routes>
     </BrowserRouter>
