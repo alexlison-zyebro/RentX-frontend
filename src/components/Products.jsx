@@ -360,13 +360,7 @@ const Products = ({ token }) => {
           <h2 className="text-3xl font-bold text-gray-900">Available Products</h2>
           <p className="text-gray-600 mt-2">Discover tools available for rent</p>
         </div>
-        <button 
-          type="button"
-          className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 rounded-xl font-semibold text-gray-700 hover:border-orange-600 transition-all"
-        >
-          <Filter className="w-5 h-5" />
-          Filters
-        </button>
+    
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -425,11 +419,7 @@ const Products = ({ token }) => {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <div className="flex items-center gap-1 text-sm">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    <span className="font-bold">4.5</span>
-                    <span className="text-gray-500">(15)</span>
-                  </div>
+              
                   <div className={`px-2 py-1 rounded-lg text-xs font-bold ${product.isAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                     {product.isAvailable ? 'Available' : 'Unavailable'}
                   </div>
