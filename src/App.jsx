@@ -9,6 +9,10 @@ import SellerHome from "./components/SellerHome";
 import AdminRequest from "./components/AdminRequest";
 import CategoryManagement from "./components/CategoryManagement";
 import ProductManagement from "./components/ProductManagement";
+import Categories from "./components/Categories";
+import Products from "./components/Products";
+import MyRentals from "./components/MyRentals";
+import About from "./components/About";
 
 function App() {
   return (
@@ -19,6 +23,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/myRentals" element={<MyRentals />} />
+        <Route path="/about" element={<About />} />
         <Route path="/adminHome" element={<AdminHome />} />
         <Route path="/adminRequest" element={<AdminRequest />} />
         <Route path="/category" element={<CategoryManagement />} />
