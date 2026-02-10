@@ -14,6 +14,8 @@ const CategoryManagement = () => {
 
   const token = localStorage.getItem('token');
   const API = 'http://localhost:4000/api/admin/categories';
+  const API2 = 'http://localhost:4000/api/categories';
+
 
   const showMessage = (type, msg) => {
     if (type === 'success') setSuccess(msg);
@@ -24,7 +26,7 @@ const CategoryManagement = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post(`${API}/all`, {}, {
+      const { data } = await axios.post(`${API2}/all`, {}, {
         headers: { 'Content-Type': 'application/json', 'token': token }
       });
       if (data.status === 'SUCCESS') setCategories(data.data || []);
