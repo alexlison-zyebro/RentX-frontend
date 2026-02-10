@@ -13,6 +13,7 @@ import Categories from "./components/Categories";
 import Products from "./components/Products";
 import MyRentals from "./components/MyRentals";
 import About from "./components/About";
+import RentalActions from "./components/RentalActions";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/category" element={<CategoryManagement />} />
         <Route path="/sellerHome" element={<SellerHome />} />
         <Route path="/productManagement" element={<ProductManagement />} />
+        <Route path="/rentalActions" element={<RentalActions />} />
  
       </Routes>
     </BrowserRouter>

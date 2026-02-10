@@ -117,18 +117,18 @@ const Home = () => {
               <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Location (Max 500 chars)"
+                placeholder="Location"
                 value={location}
                 onChange={(e) => {
                   if (e.target.value.length <= 500) {
                     setLocation(e.target.value);
                   }
                 }}
-                maxLength={500}
+                
                 className="w-full md:w-48 pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
               />
               <div className="absolute right-2 bottom-2 text-xs text-gray-500">
-                {location.length}/500
+                {location.length}
               </div>
             </div>
             <button className="px-8 py-3.5 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2">

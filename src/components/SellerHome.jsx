@@ -9,6 +9,7 @@ import {
   Award
 } from 'lucide-react';
 import ProductManagement from './ProductManagement';
+import RentalActions from './RentalActions';
 
 const SellerHome = () => {
   const navigate = useNavigate();
@@ -191,7 +192,7 @@ const SellerHome = () => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'listings', label: 'My Listings', icon: <Package className="w-5 h-5" /> },
-    { id: 'bookings', label: 'Bookings', icon: <ShoppingBag className="w-5 h-5" /> },
+    { id: 'Rentals', label: 'Rentals', icon: <ShoppingBag className="w-5 h-5" /> },
     { id: 'earnings', label: 'Earnings', icon: <DollarSign className="w-5 h-5" /> },
   ];
 
@@ -231,8 +232,8 @@ const SellerHome = () => {
         return renderDashboard();
       case 'listings':
         return canAccess ? renderListings() : renderRestricted('listings');
-      case 'bookings':
-        return canAccess ? renderBookings() : renderRestricted('bookings');
+      case 'Rentals':
+        return canAccess ? renderRentals() : renderRestricted('Rentals');
       case 'earnings':
         return canAccess ? renderEarnings() : renderRestricted('earnings');
       default:
@@ -396,15 +397,10 @@ const SellerHome = () => {
   );
 
 
-  const renderBookings = () => (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-      <h3 className="text-2xl font-bold text-gray-900 mb-6">Bookings</h3>
-      <div className="text-center py-12">
-        <ShoppingBag className="w-20 h-20 text-gray-400 mx-auto mb-6" />
-        <h4 className="text-xl font-bold text-gray-900 mb-3">No Bookings Yet</h4>
-        <p className="text-gray-600">Booking requests will appear here once customers rent your tools.</p>
-      </div>
-    </div>
+  const renderRentals = () => (
+     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+    <RentalActions />
+  </div>
   );
 
   const renderEarnings = () => (
