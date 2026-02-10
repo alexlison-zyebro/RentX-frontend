@@ -124,6 +124,29 @@ const RentalActions = () => {
     return id.slice(-6).toUpperCase();
   };
 
+  // Add these helper functions
+  const canMarkAsCollected = (startDate) => {
+    if (!startDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+    
+    return today >= start;
+  };
+
+  const canMarkAsCompleted = (endDate) => {
+    if (!endDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const end = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+    
+    return today >= end;
+  };
+
   const openRejectModal = (requestId) => {
     setSelectedRequest(requestId);
     setRejectionReason('');
@@ -229,6 +252,10 @@ const RentalActions = () => {
     const isLoading = actionLoading[request._id];
     const statusConfig = getStatusConfig(request.status);
     const requestId = getRequestId(request._id);
+
+    // Check if dates are valid for actions
+    const canCollect = canMarkAsCollected(request.startDate);
+    const canComplete = canMarkAsCompleted(request.endDate);
 
     return (
       <div 
@@ -409,11 +436,16 @@ const RentalActions = () => {
                   <button
                     type="button"
                     onClick={() => handleUpdateStatus(request._id, 'COLLECTED')}
-                    disabled={isLoading}
-                    className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+                    disabled={isLoading || !canCollect}
+                    className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 ${
+                      canCollect
+                        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                        : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    }`}
+                    title={!canCollect ? "Cannot mark as collected before the start date" : "Mark as collected"}
                   >
                     <Archive className="w-3.5 h-3.5" />
-                    Mark as Collected
+                    {canCollect ? 'Mark as Collected' : 'Not yet available for collection'}
                   </button>
                 </div>
               )}
@@ -423,11 +455,16 @@ const RentalActions = () => {
                   <button
                     type="button"
                     onClick={() => handleUpdateStatus(request._id, 'COMPLETED')}
-                    disabled={isLoading}
-                    className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:from-emerald-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+                    disabled={isLoading || !canComplete}
+                    className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 ${
+                      canComplete
+                        ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                        : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    }`}
+                    title={!canComplete ? "Cannot mark as completed before the end date" : "Mark as completed"}
                   >
                     <CheckSquare className="w-3.5 h-3.5" />
-                    Complete Rental
+                    {canComplete ? 'Mark as Completed' : 'Not yet available for completion'}
                   </button>
                 </div>
               )}
