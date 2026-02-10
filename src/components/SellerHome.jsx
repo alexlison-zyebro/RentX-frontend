@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import RentalActions from './RentalActions';
+import SellerEarnings from './SellerEarnings';
 
 const SellerHome = () => {
   const navigate = useNavigate();
@@ -405,23 +406,8 @@ const SellerHome = () => {
 
   const renderEarnings = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-gray-900">Earnings Overview</h3>
-        <div className="text-sm text-gray-600">
-          Total: <span className="text-2xl font-black text-green-600">₹0</span>
-        </div>
-      </div>
-      <div className="text-center py-12">
-        <DollarSign className="w-20 h-20 text-gray-400 mx-auto mb-6" />
-        <h4 className="text-xl font-bold text-gray-900 mb-3">No Earnings Yet</h4>
-        <p className="text-gray-600 mb-6">Start earning by renting out your tools.</p>
-        <button
-          onClick={() => setActiveTab('add-listing')}
-          className="px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-colors"
-        >
-          List a Tool to Start Earning
-        </button>
-      </div>
+    <SellerEarnings />
+ 
     </div>
   );
 

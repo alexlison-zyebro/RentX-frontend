@@ -94,8 +94,8 @@ const Products = ({ token }) => {
       return;
     }
     
-    if (end <= start) {
-      alert('End date must be after start date');
+    if (end < start) {
+      alert('End date must be on or after start date');
       return;
     }
 
@@ -162,15 +162,7 @@ const Products = ({ token }) => {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
+
 
   const calculateDays = () => {
     if (!startDate || !endDate) return 0;
@@ -321,7 +313,7 @@ const Products = ({ token }) => {
                     disabled={!startDate}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    {startDate ? `Select a date after ${formatDate(startDate)}` : 'Select start date first'}
+                    {startDate ? `Select a end date` : 'Select start date first'}
                   </p>
                 </div>
                 

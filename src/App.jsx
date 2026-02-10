@@ -14,6 +14,7 @@ import Products from "./components/Products";
 import MyRentals from "./components/MyRentals";
 import About from "./components/About";
 import RentalActions from "./components/RentalActions";
+import SellerEarnings from "./components/SellerEarnings";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/sellerHome" element={<SellerHome />} />
         <Route path="/productManagement" element={<ProductManagement />} />
         <Route path="/rentalActions" element={<RentalActions />} />
+        <Route path="/earnings" element={<SellerEarnings />} />
  
       </Routes>
     </BrowserRouter>
