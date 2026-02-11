@@ -156,7 +156,6 @@ const CategoryManagement = () => {
           </div>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow-sm p-4 border">
             <div className="flex items-center gap-3">
@@ -193,7 +192,6 @@ const CategoryManagement = () => {
           </div>
         </div>
 
-        {/* Messages */}
         {success && (
           <div className="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center gap-2">
             <CheckCircle className="w-5 h-5" />
@@ -207,7 +205,6 @@ const CategoryManagement = () => {
           </div>
         )}
 
-        {/* Table */}
         <div className="bg-white rounded-lg shadow-sm border">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">

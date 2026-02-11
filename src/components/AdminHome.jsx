@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import AdminRequest from './AdminRequest';
 import CategoryManagement from './CategoryManagement';
+import BuyerManagement from './BuyerManagement';
 
 const AdminHome = () => {
   const navigate = useNavigate();
@@ -248,11 +249,7 @@ const AdminHome = () => {
 
   const renderBuyers = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
-      <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-        <Users className="w-10 h-10 text-gray-400" />
-      </div>
-      <h4 className="text-xl font-bold text-gray-900 mb-2">Buyers Management</h4>
-      <p className="text-gray-600">Buyer data will appear here once users register.</p>
+     <BuyerManagement />
     </div>
   );
 
@@ -269,8 +266,6 @@ const AdminHome = () => {
 
     const renderCategory = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
-    
-         
          <CategoryManagement />
     </div>
   );
