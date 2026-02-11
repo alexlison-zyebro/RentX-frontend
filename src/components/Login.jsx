@@ -52,10 +52,14 @@ const Login = () => {
                 form
             );
 
-            const { token, roles, userId } = res.data;
+            const { token, roles, userId, email } = res.data;
             localStorage.setItem("userId",JSON.stringify(userId));
             localStorage.setItem("token", token);
             localStorage.setItem("roles", JSON.stringify(roles));
+            localStorage.setItem("email", JSON.stringify(email));
+            
+           
+
 
             if (roles.includes("ADMIN")) {
                 navigate("/adminHome");

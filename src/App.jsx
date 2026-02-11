@@ -15,6 +15,7 @@ import MyRentals from "./components/MyRentals";
 import About from "./components/About";
 import RentalActions from "./components/RentalActions";
 import SellerEarnings from "./components/SellerEarnings";
+import EditBuyer from "./components/EditBuyer";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/editProfile" element={<EditBuyer />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/products" element={<Products />} />
         <Route path="/myRentals" element={<MyRentals />} />

@@ -23,7 +23,7 @@ const Products = ({ token }) => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(`${BASE_URL}/seller/allProducts`, 
+      const response = await axios.post(`${BASE_URL}/allProducts`, 
         {},
         {
           headers: { 
