@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Building2, Search, MapPin, User, LogOut, Menu, X,
-  ChevronRight, RefreshCw, Edit
+  ChevronRight, RefreshCw, Edit, Shield, Clock, Award,
+  Zap, Hammer, Wrench, Drill, Camera, Mic, Bike
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Categories from './Categories.jsx';
@@ -25,8 +26,6 @@ const Home = () => {
     }
   });
   const [activeSection, setActiveSection] = useState('home');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [location, setLocation] = useState('');
 
   const [userRoles] = useState(() => {
     const rolesStr = localStorage.getItem('roles');
@@ -45,14 +44,11 @@ const Home = () => {
 
   useEffect(() => {
     if (!token) {
-
       alert('Please login to access this page.');
       navigate('/login');
       return;
     }
 
-
-    // Check if user has BUYER role (allow both BUYER and SELLER roles)
     if (!userRoles.includes('BUYER')) {
       alert('Unauthorized access. This page is for buyers only.');
       localStorage.clear();
@@ -61,7 +57,6 @@ const Home = () => {
     }
   }, [token, userRoles, navigate]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileDropdown && !event.target.closest('.profile-dropdown')) {
@@ -94,82 +89,167 @@ const Home = () => {
 
   const renderHomeContent = () => {
     return (
-      <section className="pt-8">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-orange-50 rounded-full mb-6">
-            <span className="text-sm font-normal text-orange-600">Welcome to <span className='font-bold text-gray-950'>RentX</span> </span>
+      <div className="space-y-16">
+        {/* Hero Section */}
+        <section className="pt-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-orange-50 rounded-full mb-6">
+              <Zap className="w-4 h-4 text-orange-600" />
+              <span className="text-sm font-normal text-orange-600">
+                Welcome to <span className='font-bold text-gray-950'>RentX</span>
+              </span>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
+              Rent <span className="text-orange-600">Premium Tools</span>
+              <br />For Your Next Project
+            </h1>
+
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
+              Access professional-grade equipment without the commitment. 
+              Rent from verified local sellers and complete your projects efficiently.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <button
+                onClick={() => setActiveSection('products')}
+                className="px-8 py-4 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/30 flex items-center gap-2"
+              >
+                Browse Products
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setActiveSection('categories')}
+                className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl border-2 border-gray-200 hover:border-orange-600 hover:text-orange-600 transition-all flex items-center gap-2"
+              >
+                Explore Categories
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 text-center hover:shadow-xl transition-all group">
+            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
+              <Building2 className="w-8 h-8 text-orange-600" />
+            </div>
+            <div className="text-4xl font-black text-gray-900 mb-2">500+</div>
+            <div className="text-sm font-medium text-gray-600">Premium Tools</div>
+            <div className="text-xs text-gray-400 mt-2">Quality assured equipment</div>
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 text-center hover:shadow-xl transition-all group">
+            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
+              <Award className="w-8 h-8 text-orange-600" />
+            </div>
+            <div className="text-4xl font-black text-gray-900 mb-2">4.8★</div>
+            <div className="text-sm font-medium text-gray-600">Average Rating</div>
+            <div className="text-xs text-gray-400 mt-2">From 10k+ reviews</div>
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 text-center hover:shadow-xl transition-all group">
+            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform">
+              <Shield className="w-8 h-8 text-orange-600" />
+            </div>
+            <div className="text-4xl font-black text-gray-900 mb-2">100%</div>
+            <div className="text-sm font-medium text-gray-600">Verified Sellers</div>
+            <div className="text-xs text-gray-400 mt-2">Identity & background checked</div>
+          </div>
+        </section>
+
+        {/* Featured Categories */}
+        <section className="bg-gradient-to-br from-orange-50 to-white rounded-3xl p-8 md:p-12">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Browse by <span className="text-orange-600">Category</span>
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Find exactly what you need from our wide range of professional equipment
+            </p>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
-            Find the <span className="text-orange-600">Perfect Tool</span>
-          </h1>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              { icon: Drill, name: "Power Tools", count: "120+" },
+              { icon: Hammer, name: "Hand Tools", count: "85+" },
+              { icon: Wrench, name: "Automotive", count: "45+" },
+              { icon: Camera, name: "Photography", count: "60+" },
+              { icon: Mic, name: "Audio", count: "35+" },
+              { icon: Bike, name: "Sports", count: "50+" }
+            ].map((category, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveSection('categories')}
+                className="bg-white p-6 rounded-xl hover:shadow-xl transition-all border-2 border-transparent hover:border-orange-600 group"
+              >
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-3 mx-auto group-hover:scale-110 transition-transform">
+                  <category.icon className="w-6 h-6 text-orange-600" />
+                </div>
+                <p className="font-bold text-gray-900 text-sm">{category.name}</p>
+                <p className="text-xs text-gray-500 mt-1">{category.count} items</p>
+              </button>
+            ))}
+          </div>
 
-          <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
-            Access professional-grade power tools without the commitment. Rent from verified local sellers and complete your projects efficiently.
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto mb-12">
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-3 flex flex-col md:flex-row gap-3">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search for power tools..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
-              />
-            </div>
-            <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Location"
-                value={location}
-                onChange={(e) => {
-                  if (e.target.value.length <= 500) {
-                    setLocation(e.target.value);
-                  }
-                }}
-
-                className="w-full md:w-48 pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
-              />
-              <div className="absolute right-2 bottom-2 text-xs text-gray-500">
-                {location.length}
-              </div>
-            </div>
-            <button className="px-8 py-3.5 bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2">
-              <Search className="w-5 h-5" />
-              Search
+          <div className="text-center mt-8">
+            <button
+              onClick={() => setActiveSection('categories')}
+              className="inline-flex items-center gap-2 text-orange-600 font-semibold hover:gap-3 transition-all"
+            >
+              View All Categories
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-        </div>
+        </section>
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                <Clock className="w-6 h-6 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Flexible Rental Periods</h3>
+                <p className="text-sm text-gray-600">Rent by day, week, or month</p>
+              </div>
+            </div>
+            <p className="text-gray-600 leading-relaxed">
+              Choose rental periods that match your project timeline. No long-term commitments, 
+              pay only for what you need.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <Building2 className="w-6 h-6 text-orange-600" />
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                <Shield className="w-6 h-6 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Secure & Verified</h3>
+                <p className="text-sm text-gray-600">All sellers are identity verified</p>
+              </div>
             </div>
-            <div className="text-3xl font-black text-gray-900">500+</div>
-            <div className="text-sm text-gray-600">Tools Available</div>
+            <p className="text-gray-600 leading-relaxed">
+              Every seller on our platform undergoes a strict verification process. 
+              Rent with confidence from trusted local sellers.
+            </p>
           </div>
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <User className="w-6 h-6 text-orange-600" />
-            </div>
-            <div className="text-3xl font-black text-gray-900">4.8★</div>
-            <div className="text-sm text-gray-600">Average Rating</div>
-          </div>
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <Building2 className="w-6 h-6 text-orange-600" />
-            </div>
-            <div className="text-3xl font-black text-gray-900">100%</div>
-            <div className="text-sm text-gray-600">Verified Sellers</div>
-          </div>
-        </div>
-      </section>
+        </section>
+
+        <section className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-12 text-center text-white">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to start renting?
+          </h2>
+          <p className="text-orange-100 mb-8 max-w-2xl mx-auto">
+            Join thousands of satisfied customers who have found the perfect tools for their projects
+          </p>
+          <button
+            onClick={() => setActiveSection('products')}
+            className="px-8 py-4 bg-white text-orange-600 font-bold rounded-xl hover:bg-orange-50 transition-all shadow-lg inline-flex items-center gap-2"
+          >
+            Browse Products Now
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </section>
+      </div>
     );
   };
 
@@ -186,7 +266,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Fixed Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-lg border-b border-gray-200 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
@@ -360,8 +439,6 @@ const Home = () => {
           )}
         </div>
       </nav>
-
-      {/* Main Content with Padding for Fixed Nav */}
       <div className="pt-24 pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           {renderContent()}
@@ -370,11 +447,8 @@ const Home = () => {
 
       {/* Fixed Footer */}
       <footer className="bg-gradient-to-b from-gray-900 to-black text-white">
-        {/* Main Footer Content */}
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-
-            {/* Brand Section */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-700 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
@@ -489,7 +563,6 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Divider */}
           <div className="border-t border-gray-800 my-8"></div>
 
           {/* Bottom Section */}
