@@ -6,11 +6,13 @@ import {
   Building2, ShoppingBag, BarChart3, Clock,
   Plus, CheckCircle, Shield,
   Crown, CreditCard,
-  Award
+  Award,
+  User
 } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import RentalActions from './RentalActions';
 import SellerEarnings from './SellerEarnings';
+import SellerProfile from './SellerProfile';
 
 const SellerHome = () => {
   const navigate = useNavigate();
@@ -192,6 +194,7 @@ const SellerHome = () => {
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5" /> },
+    { id: 'profile', label: 'My Profile', icon: <User className="w-5 h-5" /> },
     { id: 'listings', label: 'My Listings', icon: <Package className="w-5 h-5" /> },
     { id: 'Rentals', label: 'Rentals', icon: <ShoppingBag className="w-5 h-5" /> },
     { id: 'earnings', label: 'Earnings', icon: <DollarSign className="w-5 h-5" /> },
@@ -231,6 +234,8 @@ const SellerHome = () => {
     switch (activeTab) {
       case 'dashboard':
         return renderDashboard();
+      case 'profile':
+        return canAccess ? renderProfile() : renderRestricted('profile');
       case 'listings':
         return canAccess ? renderListings() : renderRestricted('listings');
       case 'Rentals':
@@ -391,6 +396,12 @@ const SellerHome = () => {
     );
   };
 
+  const renderProfile = () => (
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+    <SellerProfile />
+ 
+    </div>
+  );
   const renderListings = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
       <ProductManagement />
