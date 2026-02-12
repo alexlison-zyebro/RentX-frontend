@@ -10,6 +10,7 @@ import {
 import AdminRequest from './AdminRequest';
 import CategoryManagement from './CategoryManagement';
 import BuyerManagement from './BuyerManagement';
+import SellerManagement from './SellerManagement';
 
 const AdminHome = () => {
   const navigate = useNavigate();
@@ -255,11 +256,7 @@ const AdminHome = () => {
 
   const renderSellers = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
-      <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-        <Package className="w-10 h-10 text-gray-400" />
-      </div>
-      <h4 className="text-xl font-bold text-gray-900 mb-2">Sellers Management</h4>
-      <p className="text-gray-600">Seller data will appear here once sellers register.</p>
+     <SellerManagement />
     </div>
   );
 
