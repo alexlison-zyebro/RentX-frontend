@@ -18,6 +18,7 @@ import SellerEarnings from "./components/SellerEarnings";
 import EditBuyer from "./components/EditBuyer";
 import BuyerManagement from "./components/BuyerManagement";
 import SellerManagement from "./components/SellerManagement";
+import AdminRentals from "./components/AdminRentals";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/category" element={<CategoryManagement />} />
         <Route path="/buyerManagement" element={<BuyerManagement />} />
         <Route path="/sellerManagement" element={<SellerManagement />} />
+        <Route path="/adminRentals" element={<AdminRentals />} />
         <Route path="/sellerHome" element={<SellerHome />} />
         <Route path="/productManagement" element={<ProductManagement />} />
         <Route path="/rentalActions" element={<RentalActions />} />

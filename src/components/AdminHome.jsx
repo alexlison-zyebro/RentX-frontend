@@ -11,6 +11,7 @@ import AdminRequest from './AdminRequest';
 import CategoryManagement from './CategoryManagement';
 import BuyerManagement from './BuyerManagement';
 import SellerManagement from './SellerManagement';
+import AdminRentals from './AdminRentals';
 
 const AdminHome = () => {
   const navigate = useNavigate();
@@ -106,7 +107,7 @@ const AdminHome = () => {
     { id: 'buyers', label: 'Buyers', icon: <Users className="w-5 h-5" /> },
     { id: 'sellers', label: 'Sellers', icon: <Package className="w-5 h-5" /> },
     { id: 'category', label: 'Category', icon: <Layers className="w-5 h-5" /> },
-    { id: 'bookings', label: 'Bookings', icon: <Calendar className="w-5 h-5" /> },
+    { id: 'rentals', label: 'Rentals', icon: <Calendar className="w-5 h-5" /> },
   ];
 
   const renderDashboard = () => {
@@ -267,13 +268,9 @@ const AdminHome = () => {
     </div>
   );
 
-  const renderBookings = () => (
+  const renderRentals = () => (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
-      <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-        <Calendar className="w-10 h-10 text-gray-400" />
-      </div>
-      <h4 className="text-xl font-bold text-gray-900 mb-2">Bookings Management</h4>
-      <p className="text-gray-600">Booking data will appear here once users start renting tools.</p>
+        <AdminRentals />
     </div>
   );
 
@@ -287,8 +284,8 @@ const AdminHome = () => {
         return renderBuyers();
       case 'sellers':
         return renderSellers();
-      case 'bookings':
-        return renderBookings();
+      case 'rentals':
+        return renderRentals();
       case 'category':
         return renderCategory();  
       default:
