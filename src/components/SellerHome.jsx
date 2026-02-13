@@ -23,6 +23,8 @@ const SellerHome = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState('none');
   const [isProcessing, setIsProcessing] = useState(false);
   const [subscriptionMessage, setSubscriptionMessage] = useState('');
+  
+  const [hasBuyerRole, setHasBuyerRole] = useState(false);
 
   const [stats, setStats] = useState({
     activeListings: 0,
@@ -55,16 +57,18 @@ const SellerHome = () => {
       return;
     }
 
+    if (roles.includes('BUYER')) {
+      setHasBuyerRole(true);
+    }
+
     let userId = localStorage.getItem('userId');
     if (userId && userId.includes('"')) {
       userId = userId.replace(/"/g, '').trim();
       localStorage.setItem('userId', userId);
     }
 
-    // Load subscription status
     fetchSubscriptionStatus();
 
-    // Fetch stats
     setIsLoading(false);
     setStats({
       activeListings: 0,
@@ -98,7 +102,6 @@ const SellerHome = () => {
         const data = result.data;
 
         if (data.isSubscribed === true) {
-          // Check if subscription is still valid
           if (data.subscriptionEndDate) {
             const endDate = new Date(data.subscriptionEndDate);
             const now = new Date();
@@ -408,7 +411,6 @@ const SellerHome = () => {
     </div>
   );
 
-
   const renderRentals = () => (
      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
     <RentalActions />
@@ -575,13 +577,16 @@ const SellerHome = () => {
               </div>
 
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => navigate('/home')}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
-                >
-                  <Home className="w-4 h-4" />
-                  Go to Home
-                </button>
+                {hasBuyerRole && (
+                  <button
+                    onClick={() => navigate('/home')}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                  >
+                    <Home className="w-4 h-4" />
+                    Go to Home
+                  </button>
+                )}
+                
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors"
