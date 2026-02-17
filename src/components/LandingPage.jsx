@@ -19,7 +19,7 @@ const LandingPage = () => {
                         </div>
 
                         <div className="hidden lg:flex items-center gap-8">
-                            <Link href="/home" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Home</Link>
+                            <a href="#home" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Home</a>
                             <a href="#features" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Features</a>
                             <a href="#how-it-works" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">How It Works</a>
                             <a href="#contact" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Contact</a>
@@ -46,8 +46,22 @@ const LandingPage = () => {
                             <a href="#how-it-works" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors">How It Works</a>
                             <a href="#contact" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors">Contact</a>
                             <div className="border-t pt-2 mt-2">
-                                <a href="/signin" onClick={() => setMobileMenu(false)} className="block px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-lg transition-colors">Sign In</a>
-                                <a href="/signup" onClick={() => setMobileMenu(false)} className="block mx-4 my-2 px-4 py-3 text-center bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors">Sign Up</a>
+                                <Link
+                                    to="/login"
+                                    onClick={() => setMobileMenu(false)}
+                                    className="block px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 rounded-lg transition-colors"
+                                >
+                                    Sign In
+                                </Link>
+
+                                <Link
+                                    to="/registration"
+                                    onClick={() => setMobileMenu(false)}
+                                    className="block mx-4 my-2 px-4 py-3 text-center bg-orange-600 text-white font-bold rounded-xl hover:bg-orange-700 transition-colors"
+                                >
+                                    Sign Up
+                                </Link>
+
                             </div>
                         </div>
                     )}
