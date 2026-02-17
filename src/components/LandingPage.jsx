@@ -19,7 +19,7 @@ const LandingPage = () => {
                         </div>
 
                         <div className="hidden lg:flex items-center gap-8">
-                            <a href="#home" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Home</a>
+                            <Link href="/home" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Home</Link>
                             <a href="#features" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Features</a>
                             <a href="#how-it-works" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">How It Works</a>
                             <a href="#contact" className="text-base font-medium text-gray-700 hover:text-orange-600 transition-colors">Contact</a>
