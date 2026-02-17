@@ -63,7 +63,7 @@ const AdminRentals = () => {
         requestBody.year = parseInt(year);
       }
       
-      const response = await fetch('http://localhost:4000/api/admin/rentals', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rentals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -437,7 +437,7 @@ const AdminRentals = () => {
                       <div className="flex items-center gap-2">
                         {rental.productImage ? (
                           <img 
-                            src={`http://localhost:4000${rental.productImage}`} 
+                            src={`${import.meta.env.VITE_API_URL}${rental.productImage}`} 
                             alt={rental.productName || 'Product'} 
                             className="w-8 h-8 object-cover rounded flex-shrink-0"
                             onError={(e) => {

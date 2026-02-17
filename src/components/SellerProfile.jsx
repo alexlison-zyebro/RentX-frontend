@@ -45,7 +45,7 @@ const SellerProfile = () => {
     const fetchSellerDetails = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:4000/api/seller/mydetails/${userId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/seller/mydetails/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await res.json();
@@ -110,7 +110,7 @@ const SellerProfile = () => {
                 updateData.password = editForm.newPassword;
             }
 
-            const res = await fetch(`http://localhost:4000/api/seller/updateDetails/${userId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/seller/updateDetails/${userId}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${token}`,

@@ -87,7 +87,7 @@ const SellerHome = () => {
     try {
       userId = userId.replace(/"/g, '').trim();
 
-      const response = await fetch('http://localhost:4000/api/seller/subscription/status', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/seller/subscription/status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ const SellerHome = () => {
     try {
       userId = userId.replace(/"/g, '').trim();
 
-      const response = await fetch('http://localhost:4000/api/seller/subscription/activate', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/seller/subscription/activate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -93,7 +93,7 @@ const Registration = () => {
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/send-otp", { email: form.email });
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, { email: form.email });
       if (res.data.status === "SUCCESS") {
         setOtpSent(true);
         setOtpVerified(false);
@@ -118,7 +118,7 @@ const Registration = () => {
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/verify-otp", { 
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, { 
         email: form.email, otp: form.otp ,purpose: "REGISTER"
       });
       if (res.data.status === "SUCCESS") {
@@ -166,7 +166,7 @@ const Registration = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/register", payload);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, payload);
       alert("✓ Registration successful!");
       console.log(res)
       navigate('/');

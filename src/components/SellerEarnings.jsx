@@ -27,7 +27,7 @@ const SellerEarnings = () => {
     }
 
     try {
-      let url = 'http://localhost:4000/api/seller/earnings';
+      let url = `${import.meta.env.VITE_API_URL}/api/seller/earnings`;
       const params = new URLSearchParams();
       
       // Add date params for custom filter

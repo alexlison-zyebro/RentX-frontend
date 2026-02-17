@@ -91,7 +91,7 @@ const EditBuyer = () => {
     try {
       console.log('Fetching buyer with ID:', userId);
       
-      const response = await fetch(`http://localhost:4000/api/buyer/${userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/buyer/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -276,7 +276,7 @@ const EditBuyer = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/buyerUpdate/${userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/buyerUpdate/${userId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

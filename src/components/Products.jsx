@@ -26,7 +26,7 @@ const Products = ({ token }) => {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   
-  const BASE_URL = 'http://localhost:4000/api';
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
   const headers = { 
     'token': token,
@@ -325,7 +325,7 @@ const Products = ({ token }) => {
             <div key={product._id} className="bg-white rounded-3xl shadow-lg border hover:shadow-xl transition-all group">
               <div className="relative h-56 bg-gray-50 flex items-center justify-center p-6">
                 {product.image ? (
-                  <img src={`http://localhost:4000${product.image}`} alt={product.name} className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform" />
+                  <img src={`${import.meta.env.VITE_API_URL}${product.image}`} alt={product.name} className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform" />
                 ) : (
                   <Package className="w-16 h-16 text-gray-400" />
                 )}
@@ -406,7 +406,7 @@ const Products = ({ token }) => {
                 <div className="space-y-6">
                   <div className="flex gap-4 p-4 bg-gray-50 rounded-2xl">
                     {productDetails.image ? (
-                      <img src={`http://localhost:4000${productDetails.image}`} alt={productDetails.name} className="w-20 h-20 object-cover rounded-xl" />
+                      <img src={`${import.meta.env.VITE_API_URL}${productDetails.image}`} alt={productDetails.name} className="w-20 h-20 object-cover rounded-xl" />
                     ) : (
                       <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center"><Package className="w-8 h-8 text-gray-400" /></div>
                     )}

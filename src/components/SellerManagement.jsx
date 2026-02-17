@@ -22,7 +22,7 @@ const SellerManagement = () => {
     const fetchAllSellers = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:4000/api/admin/sellers/ListAll', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/sellers/ListAll`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await res.json();
@@ -43,7 +43,7 @@ const SellerManagement = () => {
         if (!seller?._id) return;
         setUpdating(true);
         try {
-            const res = await fetch(`http://localhost:4000/api/admin/sellers/toggle-status/${seller._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/sellers/toggle-status/${seller._id}`, {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${token}` }
             });

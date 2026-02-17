@@ -56,7 +56,7 @@ const AdminHome = () => {
       setIsLoading(true);
       try {
         // Fetch pending sellers count
-        const pendingResponse = await fetch('http://localhost:4000/api/admin/sellers/pending', {
+        const pendingResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/sellers/pending`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const AdminHome = () => {
         const pendingData = await pendingResponse.json();
         const pendingCount = pendingData.status === 'SUCCESS' ? pendingData.data.length : 0;
 
-        const sellersResponse = await fetch('http://localhost:4000/api/admin/sellers/all', {
+        const sellersResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/sellers/all`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

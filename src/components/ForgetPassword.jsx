@@ -18,7 +18,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [apiMessage, setApiMessage] = useState('');
 
-  const API_URL = "http://localhost:4000/api/forgot";
+  const API_URL = `${import.meta.env.VITE_API_URL}/api/forgot`;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

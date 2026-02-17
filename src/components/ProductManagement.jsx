@@ -20,7 +20,7 @@ const ProductManagement = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const token = localStorage.getItem('token');
-  const BASE_URL = 'http://localhost:4000/api';
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
   useEffect(() => {
     if (success || error) {
@@ -123,7 +123,7 @@ const ProductManagement = () => {
           pricePerDay: product.pricePerDay ? product.pricePerDay.toString() : '0',
           image: null
         });
-        setImagePreview(product.image ? `http://localhost:4000${product.image}` : '');
+        setImagePreview(product.image ? `${import.meta.env.VITE_API_URL}${product.image}` : '');
       } else {
         setFormData({
           name: '',
@@ -370,7 +370,7 @@ const ProductManagement = () => {
                   <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                     {product.image ? (
                       <img 
-                        src={`http://localhost:4000${product.image}`} 
+                        src={`${import.meta.env.VITE_API_URL}${product.image}`} 
                         alt={product.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {

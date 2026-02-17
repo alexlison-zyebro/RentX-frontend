@@ -13,8 +13,8 @@ const CategoryManagement = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const token = localStorage.getItem('token');
-  const API = 'http://localhost:4000/api/admin/categories';
-  const API2 = 'http://localhost:4000/api/categories';
+  const API = `${import.meta.env.VITE_API_URL}/api/admin/categories`;
+  const API2 = `${import.meta.env.VITE_API_URL}/api/categories`;
 
 
   const showMessage = (type, msg) => {

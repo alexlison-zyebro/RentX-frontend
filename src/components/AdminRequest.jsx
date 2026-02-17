@@ -48,7 +48,7 @@ const AdminRequest = () => {
       setError("");
 
       const response = await axios.post(
-        "http://localhost:4000/api/admin/sellers/pending",
+        `${import.meta.env.VITE_API_URL}/api/admin/sellers/pending`,
         {},
         {
           headers: {
@@ -85,7 +85,7 @@ const AdminRequest = () => {
       setActionSuccess("");
       
       const response = await axios.post(
-        "http://localhost:4000/api/admin/sellers/details",
+        `${import.meta.env.VITE_API_URL}/api/admin/sellers/details`,
         { sellerId },
         {
           headers: {
@@ -114,7 +114,7 @@ const AdminRequest = () => {
       setActionSuccess("");
 
       const response = await axios.post(
-        "http://localhost:4000/api/admin/sellers/approve",
+        `${import.meta.env.VITE_API_URL}/api/admin/sellers/approve`,
         { sellerId },
         {
           headers: {
@@ -153,7 +153,7 @@ const AdminRequest = () => {
       setActionSuccess("");
 
       const response = await axios.post(
-        "http://localhost:4000/api/admin/sellers/reject",
+        `${import.meta.env.VITE_API_URL}/api/admin/sellers/reject`,
         { 
           sellerId, 
           rejectionReason: rejectionReason.trim() 

@@ -17,7 +17,7 @@ const RentalActions = () => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [rejectionReason, setRejectionReason] = useState('');
-  const BASE_URL = 'http://localhost:4000/api';
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
   const token = localStorage.getItem('token');
 
@@ -268,7 +268,7 @@ const RentalActions = () => {
             {request.productId?.image ? (
               <div className="relative w-14 h-14 rounded-xl overflow-hidden border-2 border-gray-100 shadow-sm group-hover:shadow-md transition-shadow">
                 <img 
-                  src={`http://localhost:4000${request.productId.image}`}
+                  src={`${import.meta.env.VITE_API_URL}${request.productId.image}`}
                   alt={request.productId.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {

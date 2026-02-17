@@ -31,7 +31,7 @@ const BuyerManagement = () => {
     const fetchAllBuyers = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:4000/api/admin/buyers/all', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/buyers/all`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
@@ -49,7 +49,7 @@ const BuyerManagement = () => {
     const handleToggleStatus = async (buyer) => {
         setUpdating(true);
         try {
-            const res = await fetch(`http://localhost:4000/api/admin/buyers/toggle-status/${buyer._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/buyers/toggle-status/${buyer._id}`, {
                 method: 'PUT',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -100,7 +100,7 @@ const BuyerManagement = () => {
                 updateData.password = editForm.newPassword;
             }
 
-            const res = await fetch(`http://localhost:4000/api/buyerUpdate/${selectedBuyer._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/buyerUpdate/${selectedBuyer._id}`, {
                 method: 'PUT',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify(updateData)

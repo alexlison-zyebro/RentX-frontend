@@ -16,7 +16,7 @@ const MyRentals = () => {
   const [rentRequests, setRentRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('active');
-  const BASE_URL = 'http://localhost:4000/api';
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
   const token = localStorage.getItem('token');
 
@@ -256,7 +256,7 @@ const MyRentals = () => {
                     <div className="flex-shrink-0">
                       {productImage ? (
                         <img 
-                          src={`http://localhost:4000${productImage}`}
+                          src={`${import.meta.env.VITE_API_URL}${productImage}`}
                           alt={productName}
                           className="w-24 h-24 object-cover rounded-xl border-2 border-gray-100"
                           onError={(e) => {
