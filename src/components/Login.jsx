@@ -57,9 +57,6 @@ const Login = () => {
             localStorage.setItem("token", token);
             localStorage.setItem("roles", JSON.stringify(roles));
             localStorage.setItem("email", JSON.stringify(email));
-            
-           
-
 
             if (roles.includes("ADMIN")) {
                 navigate("/adminHome");
@@ -87,42 +84,42 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
-            <div className="absolute top-0 left-0 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-            <div className="absolute top-0 right-0 w-72 h-72 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-0 left-1/2 w-72 h-72 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4 sm:p-6">
+            <div className="absolute top-0 left-0 w-48 sm:w-72 h-48 sm:h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+            <div className="absolute top-0 right-0 w-48 sm:w-72 h-48 sm:h-72 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+            <div className="absolute bottom-0 left-1/2 w-48 sm:w-72 h-48 sm:h-72 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
-            <div className="w-full max-w-md sm:max-w-lg lg:max-w-lg relative z-10">
+            <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg relative z-10">
 
-                <div className="text-center mb-5">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl mb-1 mt-2 shadow-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 transform hover:scale-105 transition-transform duration-300">
-                        <Building2 className="w-10 h-10 text-white" />
+                <div className="text-center mb-4 sm:mb-5">
+                    <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-3xl mb-1 mt-2 shadow-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 transform hover:scale-105 transition-transform duration-300">
+                        <Building2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                     </div>
-                    <h3 className="text-4xl font-black text-gray-900 mb-3 tracking-tight">
-                        Rent<span className="text-orange-600 text-5xl">X</span>
+                    <h3 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2 sm:mb-3 tracking-tight">
+                        Rent<span className="text-orange-600 text-4xl sm:text-5xl">X</span>
                     </h3>
-                    <p className="text-gray-600 text-lg font-medium">PowerTools Marketplace</p>
+                    <p className="text-gray-600 text-base sm:text-lg font-medium">PowerTools Marketplace</p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-200 p-12 hover:shadow-3xl transition-all duration-300">
-                    <div className="mb-6">
-                        <h2 className="text-4xl font-bold text-center text-gray-900 mb-3">
+                <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-10 lg:p-12 hover:shadow-3xl transition-all duration-300">
+                    <div className="mb-5 sm:mb-6">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-3">
                             Login
                         </h2>
                         {apiError && (
-                            <p className="text-red-400 font-mono bg-orange-50 p-3 rounded-3xl mt-5 text-sm text-center font-semibold">
+                            <p className="text-red-400 font-mono bg-orange-50 p-3 rounded-3xl mt-4 sm:mt-5 text-xs sm:text-sm text-center font-semibold">
                                 {apiError}
                             </p>
                         )}
                     </div>
 
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                         <div className="group">
                             <label className="block text-sm font-bold text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors">
                                 Email Address
                             </label>
                             <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-600 transition-colors" />
+                                <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-focus-within:text-orange-600 transition-colors" />
                                 <input
                                     type="email"
                                     name="email"
@@ -130,9 +127,9 @@ const Login = () => {
                                     onChange={handleChange}
                                     onKeyPress={handleKeyPress}
                                     placeholder="you@example.com"
-                                    className={`w-full pl-12 pr-4 py-4 bg-gray-50/50 border-2 ${
+                                    className={`w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 bg-gray-50/50 border-2 ${
                                         errors.email ? 'border-red-400 bg-red-50/30' : 'border-gray-200'
-                                    } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200 placeholder-gray-400`}
+                                    } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200 placeholder-gray-400 text-sm sm:text-base`}
                                 />
                             </div>
                             {errors.email && (
@@ -148,12 +145,12 @@ const Login = () => {
                                 <label className="block text-sm font-bold text-gray-700 group-focus-within:text-orange-600 transition-colors">
                                     Password
                                 </label>
-                                <Link to="/forgotPassword" className="text-xs pr-3 font-semibold text-orange-600 hover:text-orange-700 hover:underline transition-all">
+                                <Link to="/forgotPassword" className="text-xs pr-1 sm:pr-3 font-semibold text-orange-600 hover:text-orange-700 hover:underline transition-all">
                                     forgot password?
                                 </Link>
                             </div>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-600 transition-colors" />
+                                <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-focus-within:text-orange-600 transition-colors" />
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     name="password"
@@ -161,16 +158,16 @@ const Login = () => {
                                     onChange={handleChange}
                                     onKeyPress={handleKeyPress}
                                     placeholder="••••••••"
-                                    className={`w-full pl-12 pr-14 py-4 bg-gray-50/50 border-2 mb-2 ${
+                                    className={`w-full pl-10 sm:pl-12 pr-12 sm:pr-14 py-3 sm:py-4 bg-gray-50/50 border-2 mb-2 ${
                                         errors.password ? 'border-red-400 bg-red-50/30' : 'border-gray-200'
-                                    } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200`}
+                                    } rounded-2xl focus:ring-2 focus:ring-orange-100 focus:border-orange-300 outline-none transition-all duration-200 text-sm sm:text-base`}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-600 transition-all p-1 rounded-lg hover:bg-orange-50"
+                                    className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-600 transition-all p-1 rounded-lg hover:bg-orange-50"
                                 >
-                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    {showPassword ? <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Eye className="w-4 h-4 sm:w-5 sm:h-5" />}
                                 </button>
                             </div>
                             {errors.password && (
@@ -184,13 +181,13 @@ const Login = () => {
                         <button
                             onClick={handleLogin}
                             disabled={loading}
-                            className="w-full py-4 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group/btn"
+                            className="w-full py-3 sm:py-4 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group/btn"
                         >
                             <span>{loading ? "Logging in..." : "Login"}</span>
-                            <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </button>
 
-                        <div className="relative my-8">
+                        <div className="relative my-6 sm:my-8">
                             <div className="absolute inset-0 flex items-center">
                                 <div className="w-full border-t border-gray-200"></div>
                             </div>
@@ -202,7 +199,7 @@ const Login = () => {
                         <div className="text-center">
                             <Link
                                 to="/registration"
-                                className="inline-flex items-center gap-2 text-base font-bold text-orange-600 hover:text-orange-700 transition-all group/link"
+                                className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-orange-600 hover:text-orange-700 transition-all group/link"
                             >
                                 <span className="border-b-2 border-transparent group-hover/link:border-orange-600 transition-all">
                                     Create your account
@@ -213,8 +210,8 @@ const Login = () => {
                     </div>
                 </div>
 
-                <div className="mt-8 mb-7 text-center">
-                    <p className="text-gray-500 text-sm font-medium">
+                <div className="mt-6 sm:mt-8 mb-5 sm:mb-7 text-center">
+                    <p className="text-gray-500 text-xs sm:text-sm font-medium">
                         © 2026 RentX. Empowering Tool Rentals.
                     </p>
                 </div>

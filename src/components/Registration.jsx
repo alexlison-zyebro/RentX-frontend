@@ -70,7 +70,7 @@ const Registration = () => {
     if (!form.street.trim()) newErrors.street = "Street Address is required";
     if (!form.city.trim()) newErrors.city = "City is required";
     if (!form.state.trim()) newErrors.state = "State is required";
-    
+
     if (!form.pincode) {
       newErrors.pincode = "Pincode is required";
     } else if (!validatePincode(form.pincode)) {
@@ -118,8 +118,8 @@ const Registration = () => {
 
     setLoading(true);
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, { 
-        email: form.email, otp: form.otp ,purpose: "REGISTER"
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, {
+        email: form.email, otp: form.otp, purpose: "REGISTER"
       });
       if (res.data.status === "SUCCESS") {
         setOtpVerified(true);
@@ -128,7 +128,7 @@ const Registration = () => {
       }
     } catch (err) {
       setMessage("Invalid OTP");
-      setErrors({ ...errors, otp: "Invalid OTP",err });
+      setErrors({ ...errors, otp: "Invalid OTP", err });
     } finally {
       setLoading(false);
     }
@@ -144,7 +144,7 @@ const Registration = () => {
       setMessage("Please fill all required fields correctly");
       return;
     }
-    
+
     const payload = {
       email: form.email,
       phone: form.phone,
@@ -181,98 +181,110 @@ const Registration = () => {
     }
   };
 
+  const inputBase = "w-full px-3 sm:px-4 py-3 sm:py-3.5 bg-gray-50 border-2 rounded-xl focus:ring-orange-100 focus:border-orange-300 outline-none text-sm sm:text-base";
+  const inputError = "border-red-400";
+  const inputNormal = "border-gray-200";
+
   return (
-    <div className="min-h-screen bg-orange-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl mb-8">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 shadow-lg bg-orange-600">
-            <Building2 className="w-10 h-10 text-white" />
+    <div className="min-h-screen bg-orange-50 flex items-center justify-center p-3 sm:p-4 lg:p-6">
+      <div className="w-full max-w-xl lg:max-w-4xl mb-6 sm:mb-8">
+
+        {/* Header */}
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl mb-3 sm:mb-4 shadow-lg bg-orange-600">
+            <Building2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
           </div>
-          <h3 className="text-4xl font-black text-gray-900 mb-2">
-            Rent<span className="text-orange-600 text-5xl">X</span>
+          <h3 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2">
+            Rent<span className="text-orange-600 text-4xl sm:text-5xl">X</span>
           </h3>
-          <p className="text-gray-600 text-lg font-medium">PowerTools Marketplace</p>
+          <p className="text-gray-600 text-base sm:text-lg font-medium">PowerTools Marketplace</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-12 px-14">
-          <div className="grid grid-cols-2 gap-4 mb-8">
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-5 sm:p-8 lg:p-12 lg:px-14">
+
+          {/* User Type Toggle */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
             <button
-              onClick={() => { 
-                setUserType('buyer'); 
-                setSellerType(''); 
-                setOtpSent(false); 
-                setOtpVerified(false); 
-                setMessage(""); 
+              onClick={() => {
+                setUserType('buyer');
+                setSellerType('');
+                setOtpSent(false);
+                setOtpVerified(false);
+                setMessage("");
                 setErrors({});
               }}
-              className={`flex items-center justify-center gap-2 px-4 py-4 rounded-xl font-bold transition-all ${userType === 'buyer'
+              className={`flex items-center justify-center gap-2 px-3 sm:px-4 py-3 sm:py-4 rounded-xl font-bold transition-all text-sm sm:text-base ${userType === 'buyer'
                 ? 'bg-orange-600 text-white shadow-lg'
                 : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                 }`}
             >
-              <User className="w-4 h-4" /> Buyer
+              <User className="w-4 h-4 flex-shrink-0" /> Buyer
             </button>
             <button
-              onClick={() => { 
-                setUserType('seller'); 
-                setSellerType(''); 
-                setOtpSent(false); 
-                setOtpVerified(false); 
-                setMessage(""); 
+              onClick={() => {
+                setUserType('seller');
+                setSellerType('');
+                setOtpSent(false);
+                setOtpVerified(false);
+                setMessage("");
                 setErrors({});
               }}
-              className={`flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all ${userType === 'seller'
+              className={`flex items-center justify-center gap-2 px-3 sm:px-6 py-3 sm:py-4 rounded-xl font-bold transition-all text-sm sm:text-base ${userType === 'seller'
                 ? 'bg-orange-600 text-white shadow-lg'
                 : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                 }`}
             >
-              <Store className="w-4 h-4" /> Seller
+              <Store className="w-4 h-4 flex-shrink-0" /> Seller
             </button>
           </div>
 
+          {/* Message */}
           {message && (
-            <div className={`mb-4 p-3 rounded-lg text-center font-medium ${message.includes('✓') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+            <div className={`mb-4 p-3 rounded-lg text-center font-medium text-sm sm:text-base ${message.includes('✓') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
               {message}
             </div>
           )}
 
+          {/* Seller Type Selection */}
           {userType === 'seller' && !sellerType ? (
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Choose Seller Type</h2>
-              <div className="grid grid-cols-2 gap-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Choose Seller Type</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <button onClick={() => setSellerType('individual')}
-                  className="p-8 border-2 border-gray-200 hover:border-orange-600 rounded-2xl text-left transition-all">
-                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-orange-50">
-                    <User className="w-8 h-8 text-orange-600" />
+                  className="p-5 sm:p-8 border-2 border-gray-200 hover:border-orange-600 rounded-2xl text-left transition-all">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-3 sm:mb-4 bg-orange-50">
+                    <User className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Individual Seller</h3>
-                  <p className="text-gray-600">Rent your personal tools</p>
+                  <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Individual Seller</h3>
+                  <p className="text-gray-600 text-sm sm:text-base">Rent your personal tools</p>
                 </button>
                 <button onClick={() => setSellerType('organization')}
-                  className="p-8 border-2 border-gray-200 hover:border-orange-600 rounded-2xl text-left transition-all">
-                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-orange-50">
-                    <Store className="w-8 h-8 text-orange-600" />
+                  className="p-5 sm:p-8 border-2 border-gray-200 hover:border-orange-600 rounded-2xl text-left transition-all">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-3 sm:mb-4 bg-orange-50">
+                    <Store className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Organization</h3>
-                  <p className="text-gray-600">Register your business</p>
+                  <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Organization</h3>
+                  <p className="text-gray-600 text-sm sm:text-base">Register your business</p>
                 </button>
               </div>
             </div>
           ) : (
             <>
               {sellerType && (
-                <button onClick={() => { setSellerType(''); setErrors({}); }} className="text-orange-600 font-bold mb-4 hover:text-orange-700 transition-all">
+                <button onClick={() => { setSellerType(''); setErrors({}); }} className="text-orange-600 font-bold mb-4 hover:text-orange-700 transition-all text-sm sm:text-base">
                   ← Back
                 </button>
               )}
-              
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+
+              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
                 {userType === 'buyer' ? 'Buyer Registration' : sellerType === 'individual' ? 'Individual Seller Registration' : 'Organization Registration'}
               </h2>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
+                {/* Buyer Fields */}
                 {userType === 'buyer' ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <input
                         type="text"
@@ -280,7 +292,7 @@ const Registration = () => {
                         value={form.buyerName}
                         onChange={handleChange}
                         placeholder="Full Name"
-                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.buyerName ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                        className={`${inputBase} ${errors.buyerName ? inputError : inputNormal}`}
                       />
                       {errors.buyerName && <p className="text-red-500 text-xs mt-1 ml-1">{errors.buyerName}</p>}
                     </div>
@@ -292,7 +304,7 @@ const Registration = () => {
                         onChange={handleChange}
                         placeholder="Date of Birth"
                         onFocus={(e) => e.target.type = 'date'}
-                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.dob ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                        className={`${inputBase} ${errors.dob ? inputError : inputNormal}`}
                       />
                       {errors.dob && <p className="text-red-500 text-xs mt-1 ml-1">{errors.dob}</p>}
                     </div>
@@ -307,13 +319,13 @@ const Registration = () => {
                           value={form.organizationName}
                           onChange={handleChange}
                           placeholder="Organization Name"
-                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.organizationName ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                          className={`${inputBase} ${errors.organizationName ? inputError : inputNormal}`}
                         />
                         {errors.organizationName && <p className="text-red-500 text-xs mt-1 ml-1">{errors.organizationName}</p>}
                       </div>
                     )}
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
                         <input
                           type="text"
@@ -321,7 +333,7 @@ const Registration = () => {
                           value={form.individualName}
                           onChange={handleChange}
                           placeholder={sellerType === 'individual' ? 'Full Name' : 'Owner Name'}
-                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.individualName ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                          className={`${inputBase} ${errors.individualName ? inputError : inputNormal}`}
                         />
                         {errors.individualName && <p className="text-red-500 text-xs mt-1 ml-1">{errors.individualName}</p>}
                       </div>
@@ -333,7 +345,7 @@ const Registration = () => {
                           onChange={handleChange}
                           placeholder={sellerType === 'individual' ? 'Date of Birth' : 'Owner Date of Birth'}
                           onFocus={(e) => e.target.type = 'date'}
-                          className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.individualDob ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                          className={`${inputBase} ${errors.individualDob ? inputError : inputNormal}`}
                         />
                         {errors.individualDob && <p className="text-red-500 text-xs mt-1 ml-1">{errors.individualDob}</p>}
                       </div>
@@ -341,7 +353,8 @@ const Registration = () => {
                   </>
                 )}
 
-                <div className="flex gap-3">
+                {/* Email + OTP Send */}
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <div className="flex-1">
                     <input
                       type="email"
@@ -349,18 +362,22 @@ const Registration = () => {
                       value={form.email}
                       onChange={handleChange}
                       placeholder="Email Address"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.email ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                      className={`${inputBase} ${errors.email ? inputError : inputNormal}`}
                     />
                     {errors.email && <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>}
                   </div>
-                  <button onClick={sendOtp} disabled={!form.email || loading}
-                    className="px-6 py-3.5 bg-orange-600 text-white rounded-xl font-bold whitespace-nowrap min-w-[120px] disabled:opacity-50 transition-all">
+                  <button
+                    onClick={sendOtp}
+                    disabled={!form.email || loading}
+                    className="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5 bg-orange-600 text-white rounded-xl font-bold whitespace-nowrap min-w-[110px] sm:min-w-[120px] disabled:opacity-50 transition-all text-sm sm:text-base"
+                  >
                     {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : 'Send OTP'}
                   </button>
                 </div>
-                
+
+                {/* OTP Verify */}
                 {otpSent && (
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <div className="flex-1">
                       <input
                         type="text"
@@ -369,17 +386,22 @@ const Registration = () => {
                         onChange={handleChange}
                         placeholder="6-digit OTP"
                         maxLength="6"
-                        className={`w-full px-4 py-3.5 bg-orange-50 border ${errors.otp ? 'border-red-400' : 'border-orange-300' } rounded-xl text-center font-bold tracking-widest outline-none`}
+                        className={`${inputBase} border-orange-300 bg-orange-50 text-center font-bold tracking-widest ${errors.otp ? inputError : ''}`}
                       />
                       {errors.otp && <p className="text-red-500 text-xs mt-1 ml-1">{errors.otp}</p>}
                     </div>
-                    <button onClick={verifyOtp} disabled={form.otp.length !== 6 || loading || otpVerified}
-                      className={`px-6 py-3.5 rounded-xl font-bold whitespace-nowrap min-w-[120px] ${otpVerified ? 'bg-green-100 text-green-700' : 'bg-green-500 hover:bg-green-600 text-white'} disabled:opacity-50 transition-all`}>
+                    <button
+                      onClick={verifyOtp}
+                      disabled={form.otp.length !== 6 || loading || otpVerified}
+                      className={`w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl font-bold whitespace-nowrap min-w-[110px] sm:min-w-[120px] text-sm sm:text-base ${otpVerified ? 'bg-green-100 text-green-700' : 'bg-green-500 hover:bg-green-600 text-white'} disabled:opacity-50 transition-all`}
+                    >
                       {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto bg-orange-50" /> : otpVerified ? <Check className="w-5 h-5 mx-auto" /> : 'Verify'}
                     </button>
                   </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                {/* Phone + Aadhaar */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <input
                       type="tel"
@@ -388,11 +410,11 @@ const Registration = () => {
                       onChange={handleChange}
                       placeholder="Phone Number"
                       maxLength="10"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.phone ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                      className={`${inputBase} ${errors.phone ? inputError : inputNormal}`}
                     />
                     {errors.phone && <p className="text-red-500 text-xs mt-1 ml-1">{errors.phone}</p>}
                   </div>
-                  
+
                   {userType === 'seller' && (
                     <div>
                       <input
@@ -402,12 +424,14 @@ const Registration = () => {
                         onChange={handleChange}
                         placeholder="Aadhaar Number"
                         maxLength="12"
-                        className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.aadhaarNumber ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                        className={`${inputBase} ${errors.aadhaarNumber ? inputError : inputNormal}`}
                       />
                       {errors.aadhaarNumber && <p className="text-red-500 text-xs mt-1 ml-1">{errors.aadhaarNumber}</p>}
                     </div>
                   )}
                 </div>
+
+                {/* Street */}
                 <div>
                   <input
                     type="text"
@@ -415,11 +439,13 @@ const Registration = () => {
                     value={form.street}
                     onChange={handleChange}
                     placeholder="Street Address"
-                    className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.street ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                    className={`${inputBase} ${errors.street ? inputError : inputNormal}`}
                   />
                   {errors.street && <p className="text-red-500 text-xs mt-1 ml-1">{errors.street}</p>}
                 </div>
-                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                {/* City / State / Pincode */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   <div>
                     <input
                       type="text"
@@ -427,7 +453,7 @@ const Registration = () => {
                       value={form.city}
                       onChange={handleChange}
                       placeholder="City"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.city ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                      className={`${inputBase} ${errors.city ? inputError : inputNormal}`}
                     />
                     {errors.city && <p className="text-red-500 text-xs mt-1 ml-1">{errors.city}</p>}
                   </div>
@@ -438,7 +464,7 @@ const Registration = () => {
                       value={form.state}
                       onChange={handleChange}
                       placeholder="State"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.state ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                      className={`${inputBase} ${errors.state ? inputError : inputNormal}`}
                     />
                     {errors.state && <p className="text-red-500 text-xs mt-1 ml-1">{errors.state}</p>}
                   </div>
@@ -450,15 +476,19 @@ const Registration = () => {
                       onChange={handleChange}
                       placeholder="Pincode"
                       maxLength="6"
-                      className={`w-full px-4 py-3.5 bg-gray-50 border ${errors.pincode ? 'border-red-400' : 'border-gray-200'} rounded-xl border-2 focus:ring-orange-100 focus:border-orange-300 outline-none`}
+                      className={`${inputBase} ${errors.pincode ? inputError : inputNormal}`}
                     />
                     {errors.pincode && <p className="text-red-500 text-xs mt-1 ml-1">{errors.pincode}</p>}
                   </div>
                 </div>
               </div>
 
-              <button onClick={registerUser} disabled={!otpVerified}
-                className={`w-full mt-6 px-6 py-4 rounded-xl font-bold text-lg ${otpVerified ? 'bg-orange-600 hover:bg-orange-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'} shadow-lg transition-all`}>
+              {/* Submit Button */}
+              <button
+                onClick={registerUser}
+                disabled={!otpVerified}
+                className={`w-full mt-5 sm:mt-6 px-6 py-3.5 sm:py-4 rounded-xl font-bold text-base sm:text-lg ${otpVerified ? 'bg-orange-600 hover:bg-orange-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'} shadow-lg transition-all`}
+              >
                 Register as {userType === 'buyer' ? 'Buyer' : sellerType === 'individual' ? 'Individual Seller' : 'Organization'} →
               </button>
             </>
