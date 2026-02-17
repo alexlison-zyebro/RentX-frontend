@@ -1,4 +1,25 @@
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
+import Registration from "./components/Registration";
+import LandingPage from "./components/LandingPage";
+import Login from "./components/Login";
+import ForgotPassword from "./components/ForgetPassword";
+import Home from "./components/Home";
+import AdminHome from "./components/AdminHome";
+import SellerHome from "./components/SellerHome";
+import AdminRequest from "./components/AdminRequest";
+import CategoryManagement from "./components/CategoryManagement";
+import ProductManagement from "./components/ProductManagement";
+import Categories from "./components/Categories";
+import Products from "./components/Products";
+import MyRentals from "./components/MyRentals";
+import About from "./components/About";
+import RentalActions from "./components/RentalActions";
+import SellerEarnings from "./components/SellerEarnings";
+import EditBuyer from "./components/EditBuyer";
+import BuyerManagement from "./components/BuyerManagement";
+import SellerManagement from "./components/SellerManagement";
+import AdminRentals from "./components/AdminRentals";
 
 function App() {
   return (
@@ -24,6 +45,7 @@ function App() {
       <Route path="/rentalActions" element={<RentalActions />} />
       <Route path="/earnings" element={<SellerEarnings />} />
 
+      {/* 🔑 fallback — REQUIRED */}
       <Route path="*" element={<LandingPage />} />
     </Routes>
   );
