@@ -9,7 +9,7 @@ import axios from 'axios';
 const Categories = ({ token }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const BASE_URL = `${import.meta.env.VITE_API_URL}`;
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
   const categoryIcons = {
     'Tools': <Wrench className="w-6 h-6" />,
