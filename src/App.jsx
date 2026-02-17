@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Registration from "./components/Registration";
+import LandingPage from "./components/LandingPage";
+import Login from "./components/Login";
+import ForgotPassword from "./components/ForgetPassword";
+import Home from "./components/Home";
+import AdminHome from "./components/AdminHome";
+import SellerHome from "./components/SellerHome";
+import AdminRequest from "./components/AdminRequest";
+import CategoryManagement from "./components/CategoryManagement";
+import ProductManagement from "./components/ProductManagement";
+import Categories from "./components/Categories";
+import Products from "./components/Products";
+import MyRentals from "./components/MyRentals";
+import About from "./components/About";
+import RentalActions from "./components/RentalActions";
+import SellerEarnings from "./components/SellerEarnings";
+import EditBuyer from "./components/EditBuyer";
+import BuyerManagement from "./components/BuyerManagement";
+import SellerManagement from "./components/SellerManagement";
+import AdminRentals from "./components/AdminRentals";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/editProfile" element={<EditBuyer />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/myRentals" element={<MyRentals />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/adminHome" element={<AdminHome />} />
+        <Route path="/adminRequest" element={<AdminRequest />} />
+        <Route path="/category" element={<CategoryManagement />} />
+        <Route path="/buyerManagement" element={<BuyerManagement />} />
+        <Route path="/sellerManagement" element={<SellerManagement />} />
+        <Route path="/adminRentals" element={<AdminRentals />} />
+        <Route path="/sellerHome" element={<SellerHome />} />
+        <Route path="/productManagement" element={<ProductManagement />} />
+        <Route path="/rentalActions" element={<RentalActions />} />
+        <Route path="/earnings" element={<SellerEarnings />} />
+ 
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
